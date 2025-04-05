@@ -1,24 +1,25 @@
 import './style.css'
-import typescriptLogo from './typescript.svg'
-import viteLogo from '/vite.svg'
-import { setupCounter } from './counter.ts'
+import { N3Canvas } from './screen/screen.ts';
+import { Color } from './common/colors.ts';
 
-document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
-  <div>
-    <a href="https://vite.dev" target="_blank">
-      <img src="${viteLogo}" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://www.typescriptlang.org/" target="_blank">
-      <img src="${typescriptLogo}" class="logo vanilla" alt="TypeScript logo" />
-    </a>
-    <h1>Vite + TypeScript</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite and TypeScript logos to learn more
-    </p>
-  </div>
-`
 
-setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
+function main() {
+  const htmlCanvas = document.getElementById("canvas");
+  if (!(htmlCanvas instanceof HTMLCanvasElement)) {
+    return;
+  }
+
+  const screen = new N3Canvas(htmlCanvas);
+  
+  let t = 0;
+
+  setInterval(() => {
+    screen.clear(Color.black + t);
+    t += 1;
+    screen.draw();
+    console.log("hola");
+  },10);
+  
+}
+
+main();
