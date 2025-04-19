@@ -6,10 +6,19 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "npx tsx run-tests.ts"
   },
   "devDependencies": {
+    "naive-tests-ts": "^1.0.7",
+    "tsx": "^4.19.3",
     "typescript": "~5.7.2",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "vite-plugin-top-level-await": "^1.5.0",
+    "vite-plugin-wasm": "^3.1.0"
+  },
+  "dependencies": {
+    "mainx": "file:./mainx",
+    "ts-node": "^10.9.2"
   }
 }
