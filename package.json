@@ -4,21 +4,24 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "tsc && vite build && vite",
     "build": "tsc && vite build",
-    "preview": "vite preview",
+    "preview": "tsc && vite build && vite preview",
     "test": "npx tsx run-tests.ts"
   },
   "devDependencies": {
-    "naive-tests-ts": "^1.0.7",
+    "naive-tests-ts": "^1.0.12",
+    "rollup-plugin-copy": "^3.5.0",
     "tsx": "^4.19.3",
     "typescript": "~5.7.2",
     "vite": "^6.2.0",
+    "vite-plugin-static-copy": "^2.3.1",
     "vite-plugin-top-level-await": "^1.5.0",
-    "vite-plugin-wasm": "^3.1.0"
+    "vite-plugin-wasm": "^3.1.0",
+    "vite-plugin-wasm-esm": "^1.0.3"
   },
   "dependencies": {
-    "mainx": "file:./mainx",
+    "naive-blas-wasm": "^1.0.3",
     "ts-node": "^10.9.2"
   }
 }

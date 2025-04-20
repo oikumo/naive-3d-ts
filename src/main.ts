@@ -1,6 +1,14 @@
 import { N3Canvas } from './screen/screen.ts';
 import { Color } from './common/colors.ts';
-import * as wasm from "./mainx/mainx.wasm";
+import * as blas from 'naive-blas-wasm';
+
+async function run() {
+  let x = await blas.default();
+  console.log(x.int_sqrt(9));
+  main();
+}
+
+run();
 
 /*
 import init from './main.wasm?init'
@@ -25,10 +33,9 @@ function main() {
     screen.clear(Color.black + t);
     t += 1;
     screen.draw();
-    console.log(wasm.int_sqrt(16));
 
   },10);
   
 }
 
-main();
+
