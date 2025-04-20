@@ -1,0 +1,34 @@
+.naive3dCanvas {
+  text-align: center;
+  align-content: center;
+  border:0px solid #000000;    
+  margin: 0;
+  padding: 0;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+.unselectable {
+  -moz-user-select:none;
+  -webkit-user-select:none;
+  font-family: Consolas,monospace;
+  font-size: 1%;
+  -webkit-align-content: center;
+  align-content: center;
+  display: inline-block;
+}
+html {
+  -ms-touch-action: manipulation;
+  touch-action: manipulation;
+}
+
+#drop_zone {
+  text-align: center;
+  align-content: center;
+  border: 4px solid gray;
+  width:  100px;
+  height: 50px;
+}

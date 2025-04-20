@@ -1,27 +1,27 @@
-export class CanvasRenderer {
+import { HTMLRenderTexture } from "./html-render-texture";
 
-    //private canvas: HTMLCanvasElement;
+export class HTMLCanvasRenderer {
     public width: number;
     public height: number;
     private context2d: CanvasRenderingContext2D | null;
     private imageData: ImageData | null = null;
 
     constructor(canvas: HTMLCanvasElement) {
-        //this.canvas = canvas;
         this.width = canvas.width;
         this.height = canvas.height;
         this.context2d = canvas.getContext("2d");
+        
         if (this.context2d != null) {
             this.imageData = this.context2d.createImageData(this.width, this.height);
         }
     }
 
-    draw(renderTextureBuffer: Uint8ClampedArray) {
+    draw(renderTexture: HTMLRenderTexture) {
         if (this.imageData == null || this.context2d == null) {
-            return;
+            throw Error("Invalid Params");
         }
 
-        this.imageData.data.set(renderTextureBuffer);
+        this.imageData.data.set(renderTexture.buf8);
         this.context2d.putImageData(this.imageData, 0, 0);
     }
 

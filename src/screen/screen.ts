@@ -1,35 +1,14 @@
-import { RenderTexture } from "./render-texture";
-import { CanvasRenderer } from "./renderer";
+import { Texture } from "../core/textures/texture";
+import { Vector2 } from "../core/vector/vector2";
+import { IUserInput } from "../user/user-input";
 
-export class N3Canvas {
-
-    public canvas: HTMLCanvasElement;
-    private canvasRenderer: CanvasRenderer;
-    private renderTex: RenderTexture;
-
-    constructor(canvas: HTMLCanvasElement) {
-        this.canvas = canvas;
-        this.canvasRenderer = new CanvasRenderer(canvas);
-        this.renderTex = new RenderTexture(this.canvasRenderer.width, this.canvasRenderer.height);
-    }
-
-    get tex() {
-        return this.renderTex.texture;
-    }
-
-    get width() {
-        return this.canvasRenderer.width;
-    }
-
-    get height() {
-        return this.canvasRenderer.height;
-    }
-
-    draw() {
-        this.canvasRenderer.draw(this.renderTex.buf8);
-    }
-
-    clear(color: number) {
-        this.renderTex.clear(color);
-    }
+export interface IScreen {
+    get tex() : Uint32Array;
+    get width() : number;
+    get height() : number;
+    
+    setMouseObserver(observer: IUserInput) : void;
+    update() : void;
+    paint(texture: Texture, offset: Vector2) : void;
+    clear(color: number): void;
 }

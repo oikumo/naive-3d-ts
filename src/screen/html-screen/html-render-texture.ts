@@ -1,4 +1,4 @@
-export class RenderTexture {
+export class HTMLRenderTexture {
     
     public buf8: Uint8ClampedArray;
     public texture: Uint32Array;
