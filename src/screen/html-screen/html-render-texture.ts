@@ -1,4 +1,6 @@
-export class HTMLRenderTexture {
+import { IRenderTexture } from "../render-texture";
+
+export class HTMLRenderTexture implements IRenderTexture {
     
     public buf8: Uint8ClampedArray;
     public texture: Uint32Array;

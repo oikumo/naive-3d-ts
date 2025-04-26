@@ -1,4 +1,4 @@
-import { HTMLRenderTexture } from "./html-render-texture";
+import { IRenderTexture } from "../render-texture";
 
 export class HTMLCanvasRenderer {
     public width: number;
@@ -16,7 +16,7 @@ export class HTMLCanvasRenderer {
         }
     }
 
-    draw(renderTexture: HTMLRenderTexture) {
+    draw(renderTexture: IRenderTexture) {
         if (this.imageData == null || this.context2d == null) {
             throw Error("Invalid Params");
         }

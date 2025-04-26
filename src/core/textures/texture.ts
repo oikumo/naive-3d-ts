@@ -1,3 +1,4 @@
+import { IRenderTexture } from "../../screen/render-texture";
 
 export class Texture {
     pixels: Uint32Array;
@@ -27,13 +28,13 @@ export class Texture {
         }
     }
 
-    paintTo(to: Uint32Array, toWidth: number, dx = 0, dy = 0) {
+    draw(to: IRenderTexture, toWidth: number, dx = 0, dy = 0) {
         const size = this.width * this.height;
         let col = 0;
         let row = 0;
 
         for (let i = 0; i < size; i++) {
-            to[Math.ceil(dx + col) + Math.ceil(dy + row) * toWidth] = this.pixels[col + row * this.width];
+            to.texture[Math.ceil(dx + col) + Math.ceil(dy + row) * toWidth] = this.pixels[col + row * this.width];
             if (col + 1 == this.width) {
                 col = 0;
                 row++;

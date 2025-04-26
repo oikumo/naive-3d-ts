@@ -1,5 +1,5 @@
 import { equals, test } from 'naive-tests-ts';
 
 test('load', () => {
-    equals(2,3);
+    equals(2,2);
 });

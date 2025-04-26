@@ -1,16 +1,16 @@
 import { HTMLRenderTexture } from "./html-render-texture";
 import { HTMLCanvasRenderer } from "./html-canvas-renderer";
-import { Texture } from "../../core/textures/texture";
-import { Vector2 } from "../../core/vector/vector2";
 import { IScreen } from "../screen";
 import { HTMLUserEvents } from "./html-user-events";
 import { IUserInput } from "../../user/user-input";
+import { Color } from "../../common/colors";
 
 export class HtmlScreen implements IScreen {
     private canvasRenderer: HTMLCanvasRenderer;
     private renderTexure: HTMLRenderTexture;
     private userEvents: HTMLUserEvents;
     private canvas: HTMLCanvasElement | null = null;
+    #clearColor: number = Color.black;
 
     constructor() {
         const canvas = document.getElementById("canvas");
@@ -23,32 +23,24 @@ export class HtmlScreen implements IScreen {
         this.userEvents = new HTMLUserEvents();
         this.userEvents.register(canvas);        
     }
-    
-    setMouseObserver(observer: IUserInput) {
-        this.userEvents.setTarget(observer);
-    }
-
-    get tex() {
-        return this.renderTexure.texture;
-    }
-
-    get width() {
-        return this.canvasRenderer.width;
-    }
-
-    get height() {
-        return this.canvasRenderer.height;
-    }
 
     update() {
         this.canvasRenderer.draw(this.renderTexure);
     }
 
-    paint(texture: Texture, offset: Vector2) {
-        texture.paintTo(this.renderTexure.texture, this.width, offset.x, offset.y);
+    clear() {
+        this.renderTexure.clear(this.#clearColor);
+    }
+    
+    setMouseObserver(observer: IUserInput) {
+        this.userEvents.setTarget(observer);
     }
 
-    clear(color: number) {
-        this.renderTexure.clear(color);
-    }
+    get renderTexture() { return this.renderTexure; }
+
+    get width() { return this.canvasRenderer.width; }
+
+    get height() { return this.canvasRenderer.height; }
+
+    set clearColor(color: number) { this.#clearColor = color; }
 }

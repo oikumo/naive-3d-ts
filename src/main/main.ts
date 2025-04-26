@@ -1,27 +1,35 @@
 import * as wasmBlas from 'naive-blas-wasm';
-import { Color } from '../common/colors';
-import { Texture } from '../core/textures/texture';
-import { Vector2 } from '../core/vector/vector2';
 import { IScreen } from '../screen/screen';
+import { Scene } from '../scene/scene';
 
 export class Main {
   private screen: IScreen;
-  private tex: Texture;
-  private texCenter: Vector2;
+  private scene: Scene;
+  #time: number = 0;
+  #deltaTime: number = 0;
 
   constructor(screen: IScreen) {
     this.screen = screen;
-    this.tex = new Texture(320, 320);
-    this.texCenter = { x: this.tex.width / 2, y: this.tex.height / 2 };
-    this.tex.fill(() => Color.blue);
+    this.scene = new Scene(screen);
     this.init();
   }
 
   run() {
+    this.scene.start();
+    let now = Date.now();
+    this.#time = now; 
+    this.#deltaTime = 0;
+
     setInterval(() => {
-      this.screen.clear(Color.black);
-      this.screen.paint(this.tex, this.texCenter);
+      this.screen.clear();
+      this.scene.update(this.#deltaTime);
+      this.scene.render();
       this.screen.update();
+      
+      now = Date.now();
+      this.#deltaTime = now - this.#time;
+      this.#time = now;
+
     }, 10);
   }
 
