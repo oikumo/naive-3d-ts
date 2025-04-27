@@ -34,6 +34,16 @@ export class Point2d {
         return new Point2d(point.x, point.y);
     }
 
+    static floor(point: Point2d) {
+        point.position.x = Math.floor(point.position.x);
+        point.position.y = Math.floor(point.position.y);
+    }
+
+    static scale(point: Point2d, scale: number) {
+        point.position.x *= scale;
+        point.position.y *= scale; 
+    }
+
     static cloneList(points: Array<Point2d>) {
         if (!points) return [];
         const cloned = new Array(points.length);

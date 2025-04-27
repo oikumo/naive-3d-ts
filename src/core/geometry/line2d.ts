@@ -33,16 +33,20 @@ export class Line2d {
     static draw(tex: IRenderTexture, width: number, height: number, p: Point2d, q: Point2d, color: number) {
         const delta = Point2d.delta(q, p);
         const n = Math.max(Math.abs(delta.x), Math.abs(delta.y));
+        
+        //const px = Math.floor(p.x);
+        //const py = Math.floor(p.y);
+        
         let i, t, x, y;
-
-        for (i = n - 1; i >= 0; --i) {
+        
+        for (i = n - 1; i > 0; --i) {
             t = i / n;
 
             x = Math.floor(p.x + (t * delta.x));
             if (x < 0 || x >= width)
                 continue;
 
-            y = p.y + Math.floor(t * delta.y);
+            y = Math.floor(p.y) + Math.floor(t * delta.y);
             if (y < 0 || y >= height)
                 continue;
 

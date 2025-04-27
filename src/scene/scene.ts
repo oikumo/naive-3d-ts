@@ -10,37 +10,65 @@ export class Scene {
     tex: Texture;
     texCenter: Vector2;
     lines: Array<Line2d>;
+    shape: Array<Line2d>;
 
     constructor(screen: IScreen) {
         this.#screen = screen;
         this.tex = new Texture(320, 320);
         this.texCenter = { x: this.tex.width / 2, y: this.tex.height / 2 };
         this.lines = new Array<Line2d>();
+        this.shape = new Array<Line2d>();
     }
 
     start() {
+        
         this.#screen.clearColor = Color.black;
         this.tex.fill(() => Color.blue);   
-        const center = new Point2d(50, 50);
+
+        const a = new Point2d(0, 0);
+        const b = new Point2d(0.5, Math.sin(1.04));
+        const c = new Point2d(1, 0);
+
+        Point2d.scale(a, 100);
+        Point2d.scale(b, 100);
+        Point2d.scale(c, 100);
         
-        this.lines= [
-            new Line2d(new Point2d(10, 10), center),
-            new Line2d(new Point2d(10, 50), center),
-            new Line2d(new Point2d(20, 100), center),
-            new Line2d(new Point2d(30, 150), center)
-        ];
+        // TODO Implement Triangle with vector
+        //const v = new Vector(new Uint32Array([
+        //    0, 0, 0.5, Math.sin(1.04), 1, 0 
+        //]));
+        
+        this.shape.push(
+            new Line2d(a, b),
+            new Line2d(b, c),
+            new Line2d(c, a)
+        );
     }
+    
 
     update(deltaTime: number) {
-        this.texCenter.x += deltaTime * 0.01;
-        this.texCenter.y += deltaTime * 0.01;
+        const speed = 0.05 * deltaTime;
+        for (let s of this.shape) {
+            Point2d.translate(s.a, speed * 0.1, speed * 0.1);
+            Point2d.translate(s.b, speed * 0.1, speed * 0.1);
+        }
+
+        this.tex.fill((x, y) => { 
+            return (x + y > 100) ? Math.random() * Color.blue : Color.yellow;
+        });
     }
 
     render() {
-        this.lines.forEach((line) => {
-            Line2d.draw(this.#screen.renderTexture, screen.width, screen.height, line.a, line.b, Color.red);
-        });
-
         this.tex.draw(this.#screen.renderTexture, this.#screen.width, this.texCenter.x, this.texCenter.y);
+
+        this.shape.forEach((line) => {
+            Line2d.draw(this.#screen.renderTexture, this.#screen.width, this.#screen.height, line.a, line.b, Color.green);
+        });
+        
+        //this.lines.forEach((line) => {
+        //    Line2d.draw(this.#screen.renderTexture, screen.width, screen.height, line.a, line.b, Color.red);
+        //});
+
+        
     }
 }
