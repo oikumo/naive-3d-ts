@@ -1,12 +1,13 @@
 {
   "name": "naive3d-ts",
+  "author": "oikumo@gmail.com",
   "private": true,
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsc && vite build && vite",
-    "build": "tsc && vite build",
-    "preview": "tsc && vite build && vite preview",
+    "dev": "npm i && tsc && vite build && vite",
+    "build": "npm i && tsc && vite build",
+    "preview": "npm i && tsc && vite build && vite preview",
     "test": "npx tsx run-tests.ts"
   },
   "devDependencies": {
@@ -18,10 +19,11 @@
     "vite-plugin-static-copy": "^2.3.1",
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.1.0",
-    "vite-plugin-wasm-esm": "^1.0.3"
+    "vite-plugin-wasm-esm": "^1.0.3",
+    "blas": "file:./wasm"
   },
   "dependencies": {
-    "naive-blas-wasm": "^1.0.3",
+    "naive-blas-wasm": "^1.0.9",
     "ts-node": "^10.9.2"
   }
 }
