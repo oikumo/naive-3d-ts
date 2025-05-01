@@ -23,7 +23,7 @@
     "blas": "file:./wasm"
   },
   "dependencies": {
-    "naive-blas-wasm": "^1.0.9",
+    "naive-blas-wasm": "^1.0.13",
     "ts-node": "^10.9.2"
   }
 }

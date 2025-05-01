@@ -8,7 +8,6 @@ const screen = new HtmlScreen();
 
 screen.setMouseObserver(userInputLogger);
 
-
 async function loadWasm() {
   let blas: blasWasm.MainModule | null = null;
   try {  
@@ -21,6 +20,8 @@ async function loadWasm() {
   if (blas == null){
     return null;
   } 
+
+  console.log(`draw: ${blas.draw(2222)}`);
   
     const length = 10;
     const ptr = blas._malloc(length * 4); // Allocate 40 bytes (10 Uint32s)
@@ -31,7 +32,7 @@ async function loadWasm() {
       ptr,
       length
     );
-  
+
     // Modify from TypeScript
     sharedArray[0] = 42;
   
@@ -61,6 +62,18 @@ async function loadWasm() {
     });
     
     blas.modify_array(ptr, 3, 112);
+
+
+    sharedArray.forEach(a => {
+      console.log(`original: ${a}`);
+    });
+    blas.multiply(5, ptr, length);
+    sharedArray.forEach(a => {
+      console.log(`changed: ${a}`);
+    });
+
+
+    console.log('');
 
     console.log(blas.int_sqrt(9));
 
