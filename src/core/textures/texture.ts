@@ -1,4 +1,4 @@
-import { IRenderTexture } from "../../screen/render-texture";
+import { ScreenTexture } from "../../screen/screen-texture";
 
 export class Texture {
     pixels: Uint32Array;
@@ -28,7 +28,7 @@ export class Texture {
         }
     }
 
-    draw(to: IRenderTexture, toWidth: number, dx = 0, dy = 0) {
+    draw(to: ScreenTexture, toWidth: number, dx = 0, dy = 0) {
         const size = this.width * this.height;
         let col = 0;
         let row = 0;

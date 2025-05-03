@@ -1,15 +1,16 @@
-import { IScreen } from '../screen/screen';
 import { Scene } from '../scene/scene';
+import { Blas } from '../core/blas/blas';
+import { HtmlScreen } from '../screen/screen';
 
 export class Main {
-  private screen: IScreen;
+  private screen: HtmlScreen;
   private scene: Scene;
   #time: number = 0;
   #deltaTime: number = 0;
 
-  constructor(screen: IScreen) {
+  constructor(screen: HtmlScreen, blas: Blas) {
     this.screen = screen;
-    this.scene = new Scene(screen);
+    this.scene = new Scene(screen, blas);
   }
 
   run() {

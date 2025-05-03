@@ -1,6 +1,6 @@
-import { IRenderTexture } from "../render-texture";
+import { ScreenTexture } from "./screen-texture";
 
-export class HTMLCanvasRenderer {
+export class ScreenCanvas {
     public width: number;
     public height: number;
     private context2d: CanvasRenderingContext2D | null;
@@ -16,7 +16,7 @@ export class HTMLCanvasRenderer {
         }
     }
 
-    draw(renderTexture: IRenderTexture) {
+    draw(renderTexture: ScreenTexture) {
         if (this.imageData == null || this.context2d == null) {
             throw Error("Invalid Params");
         }

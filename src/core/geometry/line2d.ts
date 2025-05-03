@@ -1,4 +1,4 @@
-import { IRenderTexture } from "../../screen/render-texture";
+import { ScreenTexture } from "../../screen/screen-texture";
 import { Point2d } from "./point2d";
 
 export class Line2d {
@@ -30,7 +30,7 @@ export class Line2d {
         return Point2d.equals(line1.a, line2.a) && Point2d.equals(line1.b, line2.b);
     }
 
-    static draw(tex: IRenderTexture, width: number, height: number, p: Point2d, q: Point2d, color: number) {
+    static draw(tex: ScreenTexture, width: number, height: number, p: Point2d, q: Point2d, color: number) {
         const delta = Point2d.delta(q, p);
         const n = Math.max(Math.abs(delta.x), Math.abs(delta.y));
         

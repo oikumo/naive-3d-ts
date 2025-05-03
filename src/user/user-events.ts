@@ -1,4 +1,4 @@
-import { IUserInput } from "../../user/user-input";
+import { IUserInput } from "./user-input";
 
 export class HTMLUserEvents {
     private target: IUserInput | null = null;

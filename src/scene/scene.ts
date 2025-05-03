@@ -1,23 +1,26 @@
 import { Color } from "../common/colors";
+import { Blas } from '../core/blas/blas';
 import { Line2d } from "../core/geometry/line2d";
 import { Point2d } from "../core/geometry/point2d";
 import { Texture } from "../core/textures/texture";
 import { Vector2 } from "../core/vector/vector2";
-import { IScreen } from "../screen/screen";
+import { HtmlScreen } from "../screen/screen";
 
 export class Scene {
-    #screen: IScreen;
+    #screen: HtmlScreen;
     tex: Texture;
     texCenter: Vector2;
     lines: Array<Line2d>;
     shape: Array<Line2d>;
+    blas: Blas;
 
-    constructor(screen: IScreen) {
+    constructor(screen: HtmlScreen, blas: Blas) {
         this.#screen = screen;
         this.tex = new Texture(320, 320);
         this.texCenter = { x: this.tex.width / 2, y: this.tex.height / 2 };
         this.lines = new Array<Line2d>();
         this.shape = new Array<Line2d>();
+        this.blas = blas;
     }
 
     start() {
@@ -32,7 +35,7 @@ export class Scene {
         Point2d.scale(a, 100);
         Point2d.scale(b, 100);
         Point2d.scale(c, 100);
-        
+
         // TODO Implement Triangle with vector
         //const v = new Vector(new Uint32Array([
         //    0, 0, 0.5, Math.sin(1.04), 1, 0 
@@ -56,6 +59,7 @@ export class Scene {
         this.tex.fill((x, y) => { 
             return (x + y > 100) ? Math.random() * Color.blue : Color.yellow;
         });
+
     }
 
     render() {
@@ -64,7 +68,14 @@ export class Scene {
         this.shape.forEach((line) => {
             Line2d.draw(this.#screen.renderTexture, this.#screen.width, this.#screen.height, line.a, line.b, Color.green);
         });
+
+        const array = this.blas.sharedArrays.get("SCREEN_TEXTURE");
+        if (array) {
+            this.blas.blas.multiply(1, array.ptr, array.length);
+        }
         
+//        this.blas.blas._free_array(array.ptr);
+
         //this.lines.forEach((line) => {
         //    Line2d.draw(this.#screen.renderTexture, screen.width, screen.height, line.a, line.b, Color.red);
         //});
