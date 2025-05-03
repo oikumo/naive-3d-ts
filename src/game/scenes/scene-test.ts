@@ -1,31 +1,27 @@
-import { Color } from "../common/colors";
-import { Blas } from '../core/blas/blas';
-import { Line2d } from "../core/geometry/line2d";
-import { Point2d } from "../core/geometry/point2d";
-import { Texture } from "../core/textures/texture";
-import { Vector2 } from "../core/vector/vector2";
-import { HtmlScreen } from "../screen/screen";
+import { Color } from "../../core/colors";
+import { Line2d } from "../../core/geometry/line2d";
+import { Point2d } from "../../core/geometry/point2d";
+import { Texture } from "../../core/textures/texture";
+import { Vector2 } from "../../core/vector/vector2";
+import { ApplicationContext } from '../../base/application/application-context';
+import { SceneBase } from "../../base/scene/scene-base";
 
-export class Scene {
-    #screen: HtmlScreen;
+export class SceneTest implements SceneBase {
     tex: Texture;
     texCenter: Vector2;
     lines: Array<Line2d>;
     shape: Array<Line2d>;
-    blas: Blas;
 
-    constructor(screen: HtmlScreen, blas: Blas) {
-        this.#screen = screen;
+    constructor() {
         this.tex = new Texture(320, 320);
         this.texCenter = { x: this.tex.width / 2, y: this.tex.height / 2 };
         this.lines = new Array<Line2d>();
         this.shape = new Array<Line2d>();
-        this.blas = blas;
     }
 
-    start() {
+    start(context: ApplicationContext) {
         
-        this.#screen.clearColor = Color.black;
+        context.screen.clearColor = Color.black;
         this.tex.fill(() => Color.blue);   
 
         const a = new Point2d(0, 0);
@@ -62,24 +58,20 @@ export class Scene {
 
     }
 
-    render() {
-        this.tex.draw(this.#screen.renderTexture, this.#screen.width, this.texCenter.x, this.texCenter.y);
+    render(context: ApplicationContext) {
+        this.tex.draw(context.screen.renderTexture, context.screen.width, this.texCenter.x, this.texCenter.y);
 
         this.shape.forEach((line) => {
-            Line2d.draw(this.#screen.renderTexture, this.#screen.width, this.#screen.height, line.a, line.b, Color.green);
+            Line2d.draw(context.screen.renderTexture, context.screen.width, context.screen.height, line.a, line.b, Color.green);
         });
 
-        const array = this.blas.sharedArrays.get("SCREEN_TEXTURE");
+        const array = context.blas.sharedArrays.get("SCREEN_TEXTURE");
         if (array) {
-            this.blas.blas.multiply(1, array.ptr, array.length);
+            context.blas.blas.multiply(1    , array.ptr, array.length);
         }
         
-//        this.blas.blas._free_array(array.ptr);
-
         //this.lines.forEach((line) => {
         //    Line2d.draw(this.#screen.renderTexture, screen.width, screen.height, line.a, line.b, Color.red);
         //});
-
-        
     }
 }

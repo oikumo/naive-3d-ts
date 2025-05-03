@@ -1,18 +1,22 @@
 import { ScreenTexture } from "./screen-texture";
 
 export class ScreenCanvas {
-    public width: number;
-    public height: number;
+
+    #width: number;
+    #height: number;
     private context2d: CanvasRenderingContext2D | null;
     private imageData: ImageData | null = null;
 
+    get width() { return this.#width; }
+    get height() { return this.#height; }
+
     constructor(canvas: HTMLCanvasElement) {
-        this.width = canvas.width;
-        this.height = canvas.height;
+        this.#width = canvas.width;
+        this.#height = canvas.height;
         this.context2d = canvas.getContext("2d");
         
         if (this.context2d != null) {
-            this.imageData = this.context2d.createImageData(this.width, this.height);
+            this.imageData = this.context2d.createImageData(this.#width, this.#height);
         }
     }
 

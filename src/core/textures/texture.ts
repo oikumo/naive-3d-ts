@@ -1,4 +1,4 @@
-import { ScreenTexture } from "../../screen/screen-texture";
+import { ScreenTexture } from "../../base/screen/screen-texture";
 
 export class Texture {
     pixels: Uint32Array;

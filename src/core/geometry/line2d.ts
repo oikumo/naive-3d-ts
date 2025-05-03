@@ -1,4 +1,4 @@
-import { ScreenTexture } from "../../screen/screen-texture";
+import { ScreenTexture } from "../../base/screen/screen-texture";
 import { Point2d } from "./point2d";
 
 export class Line2d {

@@ -1,19 +1,19 @@
 import { ScreenTexture } from "./screen-texture";
 import { ScreenCanvas } from "./screen-canvas";
-import { HTMLUserEvents } from "../user/user-events";
-import { IUserInput } from "../user/user-input";
-import { Color } from "../common/colors";
+import { UserEvents } from "../user/user-events";
+import { UserInputBase } from "../user/user-input-base";
+import { Color } from "../../core/colors";
 
-export class HtmlScreen {
+export class ScreenHtml {
     private canvasRenderer: ScreenCanvas;
     private renderTexure: ScreenTexture;
-    private userEvents: HTMLUserEvents;
+    private userEvents: UserEvents;
     #clearColor: number = Color.black;
 
     constructor(canvas: HTMLCanvasElement, canvasRenderer: ScreenCanvas, renderTexture: ScreenTexture) {
         this.canvasRenderer = canvasRenderer;
         this.renderTexure = renderTexture;
-        this.userEvents = new HTMLUserEvents();
+        this.userEvents = new UserEvents();
         this.userEvents.register(canvas);        
     }
 
@@ -25,7 +25,7 @@ export class HtmlScreen {
         this.renderTexure.clear(this.#clearColor);
     }
     
-    setMouseObserver(observer: IUserInput) {
+    setMouseObserver(observer: UserInputBase) {
         this.userEvents.setTarget(observer);
     }
 
