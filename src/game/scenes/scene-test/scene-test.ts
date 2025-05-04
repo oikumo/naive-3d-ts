@@ -19,6 +19,10 @@ export class SceneTest implements SceneBase {
         this.shape = new Array<Line2d>();
     }
 
+    setup(context: ApplicationContext) {
+        
+    }
+
     start(context: ApplicationContext) {
         
         context.screen.clearColor = Color.black;
@@ -45,7 +49,7 @@ export class SceneTest implements SceneBase {
     }
     
 
-    update(context: ApplicationContext, deltaTime: number) {
+    update(_context: ApplicationContext, deltaTime: number) {
         const speed = 0.05 * deltaTime;
         for (let s of this.shape) {
             Point2d.translate(s.a, speed * 0.1, speed * 0.1);

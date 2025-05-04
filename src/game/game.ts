@@ -5,14 +5,13 @@ import { SceneEntities } from "./scenes/scene-entities/scene-entities";
 
 export class Game implements GameBase {
     #currentScene: SceneBase;
-    #sceneTestLines: SceneEntities;
 
     constructor() {
-        this.#sceneTestLines = new SceneEntities();
-        this.#currentScene = this.#sceneTestLines;
+        this.#currentScene = new SceneEntities();
     }
 
-    setup(_context: ApplicationContext) {
+    setup(context: ApplicationContext) {
+        this.#currentScene.setup(context);
     }
 
     start(context: ApplicationContext) {

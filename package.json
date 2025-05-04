@@ -20,7 +20,7 @@
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.1.0",
     "vite-plugin-wasm-esm": "^1.0.3",
-    "naive-blas-wasm": "^1.0.13",
+    "naive-blas-wasm": "^1.0.16",
     "ts-node": "^10.9.2"
   }
 }

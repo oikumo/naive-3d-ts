@@ -32,6 +32,6 @@ export class Application {
       this.#deltaTime = now - this.#time;
       this.#time = now;
 
-    }, 10);
+    }, 1);
   }
 }

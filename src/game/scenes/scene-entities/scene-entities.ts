@@ -1,55 +1,48 @@
 import { Color } from "../../../core/colors";
-import { Texture } from "../../../core/textures/texture";
 import { ApplicationContext } from '../../../base/application/application-context';
 import { SceneBase } from "../../../base/scene/scene-base";
-import { EntityManager } from "../../../base/scene/entity-manager";
 import { UserInputBase } from "../../../base/user/user-input-base";
 import { Vector2 } from "../../../core/vector/vector2";
+import { SharedArray } from "../../../core/blas/blas-shared-array";
 
 export class SceneEntities implements SceneBase, UserInputBase {
-    #tex: Texture;
-    #entityManager: EntityManager;
-    #cursor = -1;
-    #mouseDeltaPosition = new Vector2();
+    //#entityManager: EntityManager;
     #mouseLastPosition = new Vector2();
+    #cursorTexture: SharedArray<Uint32Array> | null = null;
+    #screenTexture: SharedArray<Uint32Array> | null = null;
 
     constructor() {
-        this.#entityManager = new EntityManager(new Float32Array(1000));
-        this.#tex = new Texture(100, 100);
+        //this.#entityManager = new EntityManager(new Float32Array(1000));
     }
-    start(context: ApplicationContext) {
+
+    setup(context: ApplicationContext) {
+        context.screen.setMouseObserver(this);
         this.#mouseLastPosition.x = context.screen.width;
         this.#mouseLastPosition.y = context.screen.height;
-        
-        context.screen.setMouseObserver(this);
-        context.screen.clearColor = Color.black;
-        this.#tex.fill(() => Color.blue);   
-
-        this.#cursor = this.#entityManager.addEntity(0,0,0);
     }
 
-    update(context: ApplicationContext, deltaTime: number) {
-        const speed = 0.000001 * deltaTime;
-        /*
-        this.#entityManager.translateEntity(this.#cursor,
-            this.#mouseLastPosition.x,
-            this.#mouseLastPosition.y,
-            0
-        )*/
+    start(context: ApplicationContext) {
+        this.#cursorTexture = context.blas.createSharedArray("CURSOR", 10000);
+        this.#cursorTexture.data.fill(Color.blue);
+        this.#screenTexture = context.blas.getArray("SCREEN_TEXTURE");
+    }
+
+    update(_context: ApplicationContext, _deltaTime: number) {  
+              
     }
 
     render(context: ApplicationContext) {
-        this.#tex.draw(context.screen.renderTexture, context.screen.width,
-            this.#mouseLastPosition.x, this.#mouseLastPosition.y
-        );
+        if (this.#cursorTexture !== null && this.#screenTexture !== null) { 
+            context.blas.blas.drawTexToTex(this.#screenTexture.ptr, context.screen.width,
+                this.#cursorTexture.ptr, 100, 100, this.#mouseLastPosition.x - 50, this.#mouseLastPosition.y - 50
+            )
+        }
     }
 
     onActionUp(_x: number, _y: number): void {
     }
 
     onMove(x: number, y: number): void {
-        this.#mouseDeltaPosition.x = x;
-        this.#mouseDeltaPosition.y = y;
         this.#mouseLastPosition.x = x;
         this.#mouseLastPosition.y = y;
     }
