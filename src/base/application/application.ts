@@ -24,7 +24,7 @@ export class Application {
 
     setInterval(() => {
       this.screen.clear();
-      this.#game.update(this.#deltaTime);
+      this.#game.update(this.#context, this.#deltaTime);
       this.#game.render(this.#context);
       this.screen.update();
       

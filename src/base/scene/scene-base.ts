@@ -4,7 +4,7 @@ export interface SceneBase {
 
     start(context: ApplicationContext) : void;
 
-    update(deltaTime: number) : void;
+    update(context: ApplicationContext, deltaTime: number) : void;
 
     render(context: ApplicationContext) : void;
 }

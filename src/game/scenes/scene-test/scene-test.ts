@@ -1,12 +1,12 @@
-import { Color } from "../../core/colors";
-import { Line2d } from "../../core/geometry/line2d";
-import { Point2d } from "../../core/geometry/point2d";
-import { Texture } from "../../core/textures/texture";
-import { Vector2 } from "../../core/vector/vector2";
-import { ApplicationContext } from '../../base/application/application-context';
-import { SceneBase } from "../../base/scene/scene-base";
+import { Color } from "../../../core/colors";
+import { Line2d } from "../../../core/geometry/line2d";
+import { Point2d } from "../../../core/geometry/point2d";
+import { Texture } from "../../../core/textures/texture";
+import { Vector2 } from "../../../core/vector/vector2";
+import { ApplicationContext } from '../../../base/application/application-context';
+import { SceneBase } from "../../../base/scene/scene-base";
 
-export class SceneTestLines implements SceneBase {
+export class SceneTest implements SceneBase {
     tex: Texture;
     texCenter: Vector2;
     lines: Array<Line2d>;
@@ -32,6 +32,11 @@ export class SceneTestLines implements SceneBase {
         Point2d.scale(b, 100);
         Point2d.scale(c, 100);
 
+        // TODO Implement Triangle with vector
+        //const v = new Vector(new Uint32Array([
+        //    0, 0, 0.5, Math.sin(1.04), 1, 0 
+        //]));
+        
         this.shape.push(
             new Line2d(a, b),
             new Line2d(b, c),
@@ -40,12 +45,17 @@ export class SceneTestLines implements SceneBase {
     }
     
 
-    update(deltaTime: number) {
-        const speed = 0.000001 * deltaTime;
+    update(context: ApplicationContext, deltaTime: number) {
+        const speed = 0.05 * deltaTime;
         for (let s of this.shape) {
             Point2d.translate(s.a, speed * 0.1, speed * 0.1);
             Point2d.translate(s.b, speed * 0.1, speed * 0.1);
         }
+
+        this.tex.fill((x, y) => { 
+            return (x + y > 100) ? Math.random() * Color.blue : Color.yellow;
+        });
+
     }
 
     render(context: ApplicationContext) {

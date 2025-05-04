@@ -1,43 +1,29 @@
 import { ApplicationContext } from "../base/application/application-context";
 import { GameBase } from "../base/game/game-base";
 import { SceneBase } from "../base/scene/scene-base";
-import { SceneTest } from "./scenes/scene-test";
-import { SceneTestLines } from "./scenes/scene-test-lines";
-import { UserInputLogger } from "./user/user-input";
+import { SceneEntities } from "./scenes/scene-entities/scene-entities";
 
 export class Game implements GameBase {
     #currentScene: SceneBase;
-    #sceneTestLines: SceneTestLines;
-    #sceneTest: SceneTest;
+    #sceneTestLines: SceneEntities;
 
     constructor() {
-        this.#sceneTest = new SceneTest();
-        this.#sceneTestLines = new SceneTestLines();
-    
-        this.#currentScene = this.#sceneTest;
+        this.#sceneTestLines = new SceneEntities();
+        this.#currentScene = this.#sceneTestLines;
     }
 
-    setup(context: ApplicationContext) {
-        context.screen.setMouseObserver(new UserInputLogger(this));
+    setup(_context: ApplicationContext) {
     }
 
     start(context: ApplicationContext) {
         this.#currentScene.start(context);
     }
 
-    update(deltaTime: number) {
-        this.#currentScene.update(deltaTime);
+    update(context: ApplicationContext, deltaTime: number) {
+        this.#currentScene.update(context, deltaTime);
     }
 
     render(context: ApplicationContext) {
         this.#currentScene.render(context);
-    }
-
-    switchScenes() {
-        if (this.#currentScene === this.#sceneTest) {
-            this.#currentScene = this.#sceneTestLines;
-        } else {
-            this.#currentScene = this.#sceneTest;
-        }
     }
 }
