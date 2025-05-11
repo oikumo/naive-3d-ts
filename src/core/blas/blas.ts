@@ -44,32 +44,36 @@ export class Blas {
     }
 
     testArrays() {
-        console.log('-----ARRAYS');
+        const log = [];
+
+        log.push('-----ARRAYS');
         const array = this.createSharedArray("TEST_1", 10);
         if (array.data === null) throw Error();
         if (array.ptr === null) throw Error();
 
-        console.log('1. array. ', array.info());
+        log.push('1. array. ', array.info());
 
         this.builtInModifyArray(array.ptr, 2, 999);
-        console.log('2. array modified via ccall function index: 2, value: 999. ', array.info());
+        log.push('2. array modified via ccall function index: 2, value: 999. ', array.info());
 
         array.data[0] = 997;
         array.data[1] = 998;
-        console.log('3. array modified directly. ', array.info());
+        log.push('3. array modified directly. ', array.info());
 
         this.blas.modify_array(array.ptr, 3, 1000);
-        console.log('4. modification by blas wasm function', array.info());
+        log.push('4. modification by blas wasm function', array.info());
 
         this.blas.multiply(5, array.ptr, array.length);
-        console.log('5. multiplication by 5 using blas wasm function', array.info());
+        log.push('5. multiplication by 5 using blas wasm function', array.info());
 
         const ptrOffset = 4;
         this.blas.setValue(array.ptr + ptrOffset, 42, "i32");
-        console.log('6. direct memory write access by pointer', array.info());
+        log.push('6. direct memory write access by pointer', array.info());
 
         this.blas._free_array(array.ptr);
-        console.log('7. after array free memory', array.info());
+        log.push('7. after array free memory', array.info());
+
+        return log;
     }
 
     testClasses() {
