@@ -19,7 +19,7 @@ export class SceneTest implements SceneBase {
         this.shape = new Array<Line2d>();
     }
 
-    setup(context: ApplicationContext) {
+    setup(_context: ApplicationContext) {
         
     }
 
