@@ -19,6 +19,10 @@ export class EntityManager {
         return new EntityManager(positions);
     }
 
+    getEntity(entityID: number) {
+        return this.#positions.slice(entityID, entityID + 3);
+    }
+
     addEntity(x: number, y : number, z : number) {
         if (this.avaliable <= 0) {
             return -1;

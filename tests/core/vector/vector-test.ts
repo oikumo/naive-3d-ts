@@ -15,8 +15,6 @@ test('vector creation with different sizes with default value 0', (log) => {
     const v2 = Vector.create(5);
     notEquals(v1.length, v2.length);
 
-    log?.push(v1.length.toString());
-
     v2.access((data)  => {
         if (!data) throw Error();
         for (let i = 0; i < data.length; i++) {

@@ -6,8 +6,6 @@ test('buffers', (log) => {
     const elements = elementsBufferSize * elementsComponents;
     const positions = new Float32Array(elements);
 
-    log?.push("test buffer log 0");
-
     equals(positions.BYTES_PER_ELEMENT, Float32Array.BYTES_PER_ELEMENT);
     equals(positions.buffer.byteLength, elements * Float32Array.BYTES_PER_ELEMENT);
 
@@ -21,7 +19,4 @@ test('buffers', (log) => {
 
     positions.fill(0);
     positions.forEach((a) => { equals(a, 0);});
-
-    log?.push("test buffer log 1");
-    log?.push("test buffer log 2");
 });
