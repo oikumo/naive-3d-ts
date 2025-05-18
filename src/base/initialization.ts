@@ -8,8 +8,6 @@ import { ApplicationContext } from "./application/application-context";
 
 export async function initialization(game: Game) {
     const blas = await loadBlasModule();
-    if (blas === null) throw Error();
-    
     const canvas = document.getElementById("canvas");
     if (!(canvas instanceof HTMLCanvasElement)) {
       throw Error("Invalid Argument");

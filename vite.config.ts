@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => {
           if (mode === 'test-integration') {
             return html.replace(
               '<script type="module" src="src/main.ts"></script>',
-              '<script type="module" src="tests-integration/main-test.ts"></script>'
+              '<script type="module" src="tests-integration/run-integration-test.ts"></script>'
             );
           }
         },

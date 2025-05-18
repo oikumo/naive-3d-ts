@@ -33,7 +33,7 @@ export class SceneEntities implements SceneBase, UserInputBase {
 
     render(context: ApplicationContext) {
         if (this.#cursorTexture !== null && this.#screenTexture !== null) { 
-            context.blas.blas.drawTexToTex(this.#screenTexture.ptr, context.screen.width,
+            context.blas.module.drawTexToTex(this.#screenTexture.ptr, context.screen.width,
                 this.#cursorTexture.ptr, 100, 100, this.#mouseLastPosition.x - 50, this.#mouseLastPosition.y - 50
             )
         }
