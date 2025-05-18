@@ -8,12 +8,14 @@ test('vector creation empty', () => {
     vector.access((data) => equals(true, data !== null))
 });
 
-test('vector creation with different sizes with default value 0', () => {
+test('vector creation with different sizes with default value 0', (log) => {
     const v1 = Vector.create(10);
     equals(10, v1.length);
 
     const v2 = Vector.create(5);
     notEquals(v1.length, v2.length);
+
+    log?.push(v1.length.toString());
 
     v2.access((data)  => {
         if (!data) throw Error();

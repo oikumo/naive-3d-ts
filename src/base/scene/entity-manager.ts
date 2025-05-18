@@ -1,16 +1,29 @@
 export class EntityManager {
-    #entitySize = 3;
+    static readonly #entitySize : number = 3;
+
     #positions: Float32Array;
     #positionTop: number = 0;
 
-    constructor(positions: Float32Array) {
+    get totalCapacity() { return this.#positions.length / EntityManager.#entitySize; }
+
+    get avaliable() { return this.totalCapacity - this.#positionTop; }
+
+    private constructor(positions: Float32Array) {
         this.#positions = positions;
     }
 
+    static createFromBuffer(capacity: number) {
+        const elements = capacity * EntityManager.#entitySize;
+        const positions = new Float32Array(elements);
+
+        return new EntityManager(positions);
+    }
+
     addEntity(x: number, y : number, z : number) {
-        if (this.#positionTop >= this.#positions.length + this.#entitySize) {
+        if (this.avaliable <= 0) {
             return -1;
         }
+
         const entityIndex = this.#positionTop;
         this.#positions[entityIndex] = x;
         this.#positions[entityIndex + 1] = y;
