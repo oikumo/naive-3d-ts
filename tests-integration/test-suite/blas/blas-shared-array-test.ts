@@ -3,7 +3,7 @@ import { loadBlasModule } from "../../../src/core/blas/blas-loader";
 import { HtmlLogger } from "../../logger/html-logger";
 
 
-export async function blasArrayTest(logger: HtmlLogger)  {   
+export async function blasSharedArrayTest(logger: HtmlLogger)  {   
     const blas = await loadBlasModule();
 
     const array = blas.createSharedArray("TEST_1", 10);

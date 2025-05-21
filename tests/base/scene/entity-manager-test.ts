@@ -5,6 +5,8 @@ test('entity manager', (log) => {
     const capacity = 1000;
     const entityManager = EntityManager.createFromBuffer(capacity);
 
+
+    
     log?.push(`totalCapacity: ${entityManager.totalCapacity}`);
     log?.push(`available: ${entityManager.avaliable}`);
 

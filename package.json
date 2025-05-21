@@ -2,7 +2,7 @@
   "name": "naive3d-ts",
   "author": "oikumo@gmail.com",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.0.1",
   "type": "module",
   "scripts": {
     "test:integration": "npm i && tsc && vite build && vite --mode test-integration",
@@ -13,7 +13,7 @@
   },
   "devDependencies": {
     "naive-tests-ts": "^1.0.34",
-    "naive-blas-wasm": "^1.0.16",
+    "naive-blas-wasm": "^1.0.18",
     "rollup-plugin-copy": "^3.5.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",

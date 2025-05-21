@@ -3,13 +3,13 @@ import { ApplicationContext } from '../../../base/application/application-contex
 import { SceneBase } from "../../../base/scene/scene-base";
 import { UserInputBase } from "../../../base/user/user-input-base";
 import { Vector2 } from "../../../core/vector/vector2";
-import { SharedArray } from "../../../core/blas/blas-shared-array";
+import { BlasArray } from "../../../core/blas/blas-array";
 
 export class SceneEntities implements SceneBase, UserInputBase {
     //#entityManager: EntityManager;
     #mouseLastPosition = new Vector2();
-    #cursorTexture: SharedArray<Uint32Array> | null = null;
-    #screenTexture: SharedArray<Uint32Array> | null = null;
+    #cursorTexture: BlasArray<Uint32Array> | null = null;
+    #screenTexture: BlasArray<Uint32Array> | null = null;
 
     constructor() {
         //this.#entityManager = new EntityManager(new Float32Array(1000));
@@ -28,7 +28,8 @@ export class SceneEntities implements SceneBase, UserInputBase {
     }
 
     update(_context: ApplicationContext, _deltaTime: number) {  
-              
+
+
     }
 
     render(context: ApplicationContext) {

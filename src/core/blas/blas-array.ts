@@ -1,4 +1,6 @@
-export class SharedArray<T extends RelativeIndexable<number>> {
+import { Blas } from "./blas";
+
+export class BlasArray<T extends RelativeIndexable<number>> {
     length: number = 0;
     ptr: number = 0;
     data: T;
@@ -7,8 +9,8 @@ export class SharedArray<T extends RelativeIndexable<number>> {
         this.ptr = ptr;
         this.data = data;
         this.length = length;
-
     }
+
 
     info() {
         if(this.data === null) throw Error();
@@ -19,5 +21,17 @@ export class SharedArray<T extends RelativeIndexable<number>> {
         }
 
         return 'data: [' + message.join(', ') + ']';
+    }
+
+    static createFloat32Array(blas: Blas, length: number) {
+        const bytes = 4;
+        const ptr = blas.module._malloc(length * bytes);
+
+        const data = new Float32Array(
+            blas.module.HEAPU32.buffer,
+            ptr,
+            length);
+
+        return new BlasArray<Float32Array>(ptr, data, length);
     }
 }
