@@ -1,4 +1,4 @@
-import { DashboardTestResult } from '../ui/dashboard/controllers/dasboard-controller';
+import { DashboardTestResult } from "../ui/dashboard/controllers/interface/DashboardTestResult";
 import { HtmlLogger } from '../ui/logger/html-logger';
 import { IntegrationTestResult } from './integration-test-result';
 

@@ -1,4 +1,5 @@
-import { DashboardController, DashboardTestResult } from "../dashboard/controllers/dasboard-controller";
+import { DashboardController } from "../dashboard/controllers/dasboard-controller";
+import { DashboardTestResult } from "../dashboard/controllers/interface/DashboardTestResult";
 
 export class HtmlLogger {
     #dashboard: DashboardController;

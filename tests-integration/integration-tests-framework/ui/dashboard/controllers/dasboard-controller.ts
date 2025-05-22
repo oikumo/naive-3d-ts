@@ -1,22 +1,7 @@
 import { ModelTestResult } from "../model/test-result";
 import { Dashboard } from "../views/dashboard";
-
-export class Information {
-    title: string;
-    version: string;
-
-    constructor(title: string, version: string) {
-        this.title = title;
-        this.version = version;
-    }
-}
-
-export class DashboardTestResult {
-    description: string;
-    messages = new Array<string>();
-    pass = false;
-}
-
+import { Information } from "./interface/Information";
+import { DashboardTestResult } from "./interface/DashboardTestResult";
 
 export class DashboardController {
     #view: Dashboard;
@@ -32,6 +17,6 @@ export class DashboardController {
             modelResult.description = result.description;
             modelResults.push(modelResult);
         }
-        this.#view.setResult(modelResults);
+        this.#view.updateTestResults(modelResults);
     }
 }

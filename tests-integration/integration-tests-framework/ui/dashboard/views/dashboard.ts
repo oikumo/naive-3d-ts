@@ -1,4 +1,4 @@
-import { Information } from "../controllers/dasboard-controller";
+import { Information } from "../controllers/interface/Information";
 import { ModelTestResult } from "../model/test-result";
 import { createSidebar } from "./sidebar";
 import { TestCard, TestCardConfig } from "./test-card";
@@ -41,16 +41,9 @@ export class Dashboard {
             this.#header,
             this.#dashboardGrid
         );
-
-                document.querySelectorAll('.test-card').forEach(card => {
-            card.addEventListener('click', () => {
-                card.classList.toggle('expanded');
-            });
-        });
-
     }
 
-    setResult(results: Array<ModelTestResult>) {
+    updateTestResults(results: Array<ModelTestResult>) {
         const items = new Array<HTMLDivElement>();
 
         for (let i  = 0; i < results.length; i++) {
@@ -68,6 +61,12 @@ export class Dashboard {
         }
 
         this.#testContainer?.replaceChildren(...items);
+        
+        document.querySelectorAll('.test-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.toggle('expanded');
+            });
+        });
     }
 
     createHeader() {

@@ -4,7 +4,8 @@ import { blasSharedArrayTest } from './tests/blas/blas-shared-array-test';
 import { blasClassesTest } from './tests/blas/blas-classes-test';
 import { blasWasmModuleTest } from './tests/blas/blas-wasm-module-test';
 import { entitiesIntegrationTest } from './tests/entities/entities-integration-test';
-import { DashboardController, Information } from './integration-tests-framework/ui/dashboard/controllers/dasboard-controller';
+import { DashboardController } from './integration-tests-framework/ui/dashboard/controllers/dasboard-controller';
+import { Information } from "./integration-tests-framework/ui/dashboard/controllers/interface/Information";
 
 const runner = new IntegrationTestRunner([
     entitiesIntegrationTest,
