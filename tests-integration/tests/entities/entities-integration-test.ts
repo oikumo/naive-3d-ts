@@ -1,7 +1,6 @@
-import { HtmlLogger } from "../../logger/html-logger";
-import { IntegrationTestContext } from "../../common/Integration-test-context";
-import { EntityManager } from "../../../src/base/scene/entity-manager";
 import { BlasArray } from "../../../src/core/blas/blas-array";
+import { IntegrationTestContext } from "../../integration-tests-framework/common/Integration-test-context";
+import { HtmlLogger } from "../../integration-tests-framework/ui/logger/html-logger";
 
 export async function entitiesIntegrationTest(logger: HtmlLogger) {
     const context = await IntegrationTestContext.create();

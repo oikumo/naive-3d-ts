@@ -33,12 +33,21 @@ export default defineConfig(({ mode }) => {
       {
         name: 'customHtmlReplace',
         transformIndexHtml(html) {
+          let htmlResult = html;
+
           if (mode === 'test-integration') {
-            return html.replace(
+            htmlResult = htmlResult.replace(
               '<script type="module" src="src/main.ts"></script>',
               '<script type="module" src="tests-integration/run-integration-test.ts"></script>'
             );
+            htmlResult = htmlResult.replace(
+              '<link rel="stylesheet" type="text/css" href="./styles/style.css" />',
+              '<link rel="stylesheet" type="text/css" href="./styles/style-test-integration.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">'
+            );
+
           }
+
+          return htmlResult;
         },
       },
     ],

@@ -1,4 +1,4 @@
-import { HtmlLogger } from '../logger/html-logger';
+import { HtmlLogger } from '../ui/logger/html-logger';
 import { IntegrationTestResult } from './integration-test-result';
 
 export type TestFunc = (logger: HtmlLogger) => Promise<void>;

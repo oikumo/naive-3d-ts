@@ -1,5 +1,5 @@
-import { Blas } from "../../src/core/blas/blas";
-import { loadBlasModule } from "../../src/core/blas/blas-loader";
+import { Blas } from "../../../src/core/blas/blas";
+import { loadBlasModule } from "../../../src/core/blas/blas-loader";
 import { IntegrationTestContextError } from "./Integration-test-context-error";
 
 export class IntegrationTestContext {

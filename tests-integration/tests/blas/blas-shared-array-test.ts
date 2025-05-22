@@ -1,7 +1,5 @@
-import { Blas } from "../../../src/core/blas/blas";
 import { loadBlasModule } from "../../../src/core/blas/blas-loader";
-import { HtmlLogger } from "../../logger/html-logger";
-
+import { HtmlLogger } from "../../integration-tests-framework/ui/logger/html-logger";
 
 export async function blasSharedArrayTest(logger: HtmlLogger)  {   
     const blas = await loadBlasModule();
