@@ -1,20 +1,31 @@
-import { Dashboard } from "../dashboard/dashboard";
+import { DashboardController, DashboardTestResult } from "../dashboard/controllers/dasboard-controller";
 
 export class HtmlLogger {
-    #dashboard: Dashboard;
+    #dashboard: DashboardController;
+    #testResults = new Array<DashboardTestResult>();
 
-    constructor(dashboard: Dashboard){
+    constructor(dashboard: DashboardController){
         this.#dashboard = dashboard;
     }
 
+    newTestResult(description: string) {
+        const testResult = new DashboardTestResult();
+        testResult.description = description;
+        this.#testResults.push(testResult);
+
+        return testResult;
+    }
 
     log(message: string) {
-        this.#dashboard.setResult(message);
-        //this.createText(message);
+        if (this.#testResults.length === 0) return;
+        this.#testResults[this.#testResults.length - 1].messages.push(message);
+    }
+
+    addResult() {
+        this.#dashboard.updateTestResults(this.#testResults);
     }
 
     success(message: string) {
-        //this.createParagraph(message);
     }    
 }
 

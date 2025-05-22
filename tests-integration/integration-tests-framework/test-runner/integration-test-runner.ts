@@ -1,3 +1,4 @@
+import { DashboardTestResult } from '../ui/dashboard/controllers/dasboard-controller';
 import { HtmlLogger } from '../ui/logger/html-logger';
 import { IntegrationTestResult } from './integration-test-result';
 
@@ -17,6 +18,9 @@ export class IntegrationTestRunner {
         this.#results.length = 0;
 
         for (let test of this.#tests) {
+            const testResult = new DashboardTestResult();
+
+            logger.newTestResult(test.name);
             logger.log(`test: ${test.name} begin`);
             try {
                 await test(logger);
@@ -31,6 +35,7 @@ export class IntegrationTestRunner {
                 yield result;
             }
             logger.log(`test: ${test.name} end`);
+            logger.addResult();
         }
     }
 }
