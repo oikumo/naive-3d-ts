@@ -18,20 +18,20 @@ export class IntegrationTestRunner {
         this.#results.length = 0;
 
         for (let test of this.#tests) {
-            const testResult = new DashboardTestResult();
-
             logger.newTestResult(test.name);
             logger.log(`test: ${test.name} begin`);
             try {
                 await test(logger);
                 const result = new IntegrationTestResult(test.name, 'pass');
                 this.#results.push(result);
+                logger.result(true);
                 yield result;
 
             } catch(err) {
                 console.log(err);
                 const result = new IntegrationTestResult(test.name, 'fail');
                 this.#results.push(result);
+                logger.result(false);   
                 yield result;
             }
             logger.log(`test: ${test.name} end`);

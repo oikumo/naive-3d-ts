@@ -1,13 +1,38 @@
-import { BlasArray } from "../../../src/core/blas/blas-array";
+import { EntityManager } from "../../../src/base/scene/entity-manager";
+import { BlasArrayF32 } from "../../../src/core/blas/blas-array";
 import { IntegrationTestContext } from "../../integration-tests-framework/common/Integration-test-context";
 import { HtmlLogger } from "../../integration-tests-framework/ui/logger/html-logger";
 
 export async function entitiesIntegrationTest(logger: HtmlLogger) {
     const context = await IntegrationTestContext.create();
+    
+    throw Error();
+    const capacity = 1000;
+    const entityManager = new EntityManager(context.blas, new BlasArrayF32(context.blas, capacity));
+
+    
+    logger.log(`totalCapacity: ${entityManager.totalCapacity}`);
+    logger.log(`available: ${entityManager.avaliable}`);
+
+    const a = 1.1;
+    
+    const entitiesId = new Array<number>();
+
+    for (let i = 0; i < 3; i++) {
+        entitiesId.push(entityManager.addEntity(i, i, i));
+    }
+
+    entitiesId.forEach((id) => {
+        logger.log(`entity id ${id} : ${entityManager.getEntity(id)}`);
+    });
+    
+    logger.log(`totalCapacity: ${entityManager.totalCapacity}`);
+    logger.log(`available: ${entityManager.avaliable}`);
+
     const arrayDataLog = Array<string>();
 
-    const array = BlasArray.createFloat32Array(context.blas, 50);
-    const arraySegment = BlasArray.createFloat32Array(context.blas, 4);
+    const array = new BlasArrayF32(context.blas, 50);
+    const arraySegment = new BlasArrayF32(context.blas, 4);
 
     for (let i = 0; i < arraySegment.length; i++) {
         arraySegment.data[i] = 6.1;
@@ -33,7 +58,6 @@ export async function entitiesIntegrationTest(logger: HtmlLogger) {
 
     logger.log(arrayDataLog.join(', '));
     logger.log('');
-
 
     
     return;

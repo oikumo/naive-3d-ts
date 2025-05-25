@@ -1,30 +1,23 @@
 import * as blasWasm from 'naive-blas-wasm';
-import { BlasArray } from './blas-array';
+import { BlasArrayUint32 } from './blas-array';
 
 
 export class Blas {
     module: blasWasm.MainModule;
-    sharedArrays = new Map<string, BlasArray<Uint32Array>>();
+    sharedArrays = new Map<string, BlasArrayUint32>();
 
     constructor(blas: blasWasm.MainModule) {
         this.module = blas;
     }
 
-    getArray(id: string) : BlasArray<Uint32Array> | null {
+    getArray(id: string) : BlasArrayUint32 | null {
         const texture = this.sharedArrays.get(id);
         if (texture === undefined) return null;
         return texture;
     }
 
     createSharedArray(id: string,length: number) {
-        const bytes = 4;
-        const ptr = this.module._malloc(length * bytes);
-        const data = new Uint32Array(
-            this.module.HEAPU32.buffer,
-            ptr,
-            length);
-
-        const sharedArray = new BlasArray<Uint32Array>(ptr, data, length);
+        const sharedArray = new BlasArrayUint32(this.module, length);
         this.sharedArrays.set(id, sharedArray);
 
         return sharedArray;

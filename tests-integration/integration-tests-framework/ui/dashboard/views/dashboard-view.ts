@@ -5,7 +5,7 @@ import { TestCard, TestCardConfig } from "./test-card";
 import { createTestContainer } from "./test-card-container";
 
 
-export class Dashboard {
+export class DashboardView {
     #information: Information;
     #document: Document;
     #rootElement: HTMLElement;
@@ -48,14 +48,12 @@ export class Dashboard {
 
         for (let i  = 0; i < results.length; i++) {
             const config: TestCardConfig = {
-                status: 'success',
+                status: results[i].pass ? 'success' : 'failed',
                 title: results[i].description,
                 duration: '1.2s',
                 environment: 'Chrome 104',
                 progressWidth: '100%',
-                details: `✓ Successfully logged in with valid credentials
-                ✓ Invalid credentials rejected
-                ✓ Session persistence verified`
+                details: results[i].messages.join('\n')
             };
             items.push(this.createTestItem(i.toString(), config));
         }

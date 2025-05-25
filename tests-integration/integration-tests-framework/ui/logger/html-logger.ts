@@ -22,6 +22,10 @@ export class HtmlLogger {
         this.#testResults[this.#testResults.length - 1].messages.push(message);
     }
 
+    result(pass: boolean) {
+        this.#testResults[this.#testResults.length - 1].pass = pass;
+    }
+
     addResult() {
         this.#dashboard.updateTestResults(this.#testResults);
     }

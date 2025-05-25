@@ -4,6 +4,8 @@ import { HtmlLogger } from "../../integration-tests-framework/ui/logger/html-log
 export async function blasClassesTest(logger: HtmlLogger) {
     const blas = await loadBlasModule();
 
+    throw Error();
+
     const data = new blas.module.Data();
     data.createArray(100000);
 

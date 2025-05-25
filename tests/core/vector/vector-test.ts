@@ -1,5 +1,5 @@
 import { equals, notEquals, test } from "naive-tests-ts";
-import { Vector } from '../../../src/core/vector/vector'
+import { Vector } from '../../../src/core/types/vector/vector'
 
 test('vector creation empty', () => {
     let vector = new Vector();

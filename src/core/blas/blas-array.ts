@@ -1,37 +1,48 @@
+import { MainModule } from "naive-blas-wasm";
 import { Blas } from "./blas";
 
-export class BlasArray<T extends RelativeIndexable<number>> {
+export class BlasArrayF32 {
     length: number = 0;
     ptr: number = 0;
-    data: T;
+    data: Float32Array;
+    blas: Blas;
 
-    constructor(ptr: number, data: T, length: number) {
-        this.ptr = ptr;
-        this.data = data;
+    constructor(blas: Blas, length: number) {
+        this.blas = blas;
         this.length = length;
-    }
+        this.ptr = this.blas.module._malloc(length * Float32Array.BYTES_PER_ELEMENT);
 
-
-    info() {
-        if(this.data === null) throw Error();
-        const message = [];
-    
-        for (let i = 0; i < this.length; i++) {
-            message.push(this.data.at(i));
-        }
-
-        return 'data: [' + message.join(', ') + ']';
-    }
-
-    static createFloat32Array(blas: Blas, length: number) {
-        const bytes = 4;
-        const ptr = blas.module._malloc(length * bytes);
-
-        const data = new Float32Array(
-            blas.module.HEAPU32.buffer,
-            ptr,
+        this.data = new Float32Array(
+            blas.module.HEAPU8.buffer,
+            this.ptr,
             length);
 
-        return new BlasArray<Float32Array>(ptr, data, length);
+        const initialView = this.view;
+            for (let i = 0; i < this.length; i++) {
+            initialView[i] = NaN;
+        }
+    }
+
+    get view() {
+        return new Float32Array(
+        this.blas.module.HEAPU8.buffer, // Always fresh reference
+        this.ptr,
+        this.length);
+    }
+}
+
+export class BlasArrayUint32 {
+    length: number = 0;
+    ptr: number = 0;
+    data: Uint32Array;
+
+    constructor(blas: MainModule, length: number) {
+        this.length = length;
+        this.ptr = blas._malloc(length * Uint32Array.BYTES_PER_ELEMENT);
+
+        this.data = new Uint32Array(
+            blas.HEAPU32.buffer,
+            this.ptr,
+            length);
     }
 }

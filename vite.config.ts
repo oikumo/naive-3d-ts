@@ -42,7 +42,7 @@ export default defineConfig(({ mode }) => {
             );
             htmlResult = htmlResult.replace(
               '<link rel="stylesheet" type="text/css" href="./styles/style.css" />',
-              '<link rel="stylesheet" type="text/css" href="./styles/style-test-integration.css" /><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">'
+              '<link rel="stylesheet" type="text/css" href="./styles/style-test-integration.css" />'
             );
 
           }
