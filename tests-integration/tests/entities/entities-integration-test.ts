@@ -1,7 +1,7 @@
+import { HtmlLogger } from "naive-3d-integration-ts";
 import { EntityManager } from "../../../src/base/scene/entity-manager";
 import { BlasArrayF32 } from "../../../src/core/blas/blas-array";
-import { IntegrationTestContext } from "../../integration-tests-framework/common/Integration-test-context";
-import { HtmlLogger } from "../../integration-tests-framework/ui/logger/html-logger";
+import { IntegrationTestContext } from "../../common/blas-context";
 
 export async function entitiesIntegrationTest(logger: HtmlLogger) {
     const context = await IntegrationTestContext.create();

@@ -1,6 +1,5 @@
-import { Blas } from "../../../src/core/blas/blas";
-import { loadBlasModule } from "../../../src/core/blas/blas-loader";
-import { IntegrationTestContextError } from "./Integration-test-context-error";
+import { Blas } from "../../src/core/blas/blas";
+import { loadBlasModule } from "../../src/core/blas/blas-loader";
 
 export class IntegrationTestContext {
     #blas: Blas;
@@ -19,9 +18,7 @@ export class IntegrationTestContext {
             );
         
         } catch (err){
-            throw new IntegrationTestContextError(err);
+            throw Error(err);
         }
     }
 }
-
-

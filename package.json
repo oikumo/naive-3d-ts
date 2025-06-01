@@ -12,8 +12,9 @@
     "test": "npx tsx run-tests.ts"
   },
   "devDependencies": {
-    "naive-tests-ts": "^1.0.34",
+    "naive-3d-integration-ts": "^0.0.2",
     "naive-blas-wasm": "^1.0.18",
+    "naive-tests-ts": "^1.0.34",
     "rollup-plugin-copy": "^3.5.0",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.3",
