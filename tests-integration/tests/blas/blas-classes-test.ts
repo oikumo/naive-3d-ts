@@ -1,7 +1,7 @@
+import { TestLogger } from "naive-3d-integration-ts";
 import { loadBlasModule } from "../../../src/core/blas/blas-loader";
-import { HtmlLogger } from "../../integration-tests-framework/ui/logger/html-logger";
 
-export async function blasClassesTest(logger: HtmlLogger) {
+export async function blasClassesTest(logger: TestLogger) {
     const blas = await loadBlasModule();
 
     throw Error();

@@ -1,6 +1,6 @@
+import { TestLogger } from "naive-3d-integration-ts";
 import { BlasArrayUint32 } from "../../../src/core/blas/blas-array";
 import { loadBlasModule } from "../../../src/core/blas/blas-loader";
-import { HtmlLogger } from "../../integration-tests-framework/ui/logger/html-logger";
 
 function logArray(array: BlasArrayUint32) {
     const data = new Array<string>();
@@ -12,7 +12,7 @@ function logArray(array: BlasArrayUint32) {
     return data.join(',');
 }
 
-export async function blasSharedArrayTest(logger: HtmlLogger)  {   
+export async function blasSharedArrayTest(logger: TestLogger)  {   
     const blas = await loadBlasModule();
 
     throw Error();

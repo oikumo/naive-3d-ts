@@ -37,12 +37,16 @@ export default defineConfig(({ mode }) => {
 
           if (mode === 'test-integration') {
             htmlResult = htmlResult.replace(
+              '<canvas id="canvas" width="720" height="640" class="naive3dCanvas"></canvas>',
+              ''
+            );
+            htmlResult = htmlResult.replace(
               '<script type="module" src="src/main.ts"></script>',
               '<script type="module" src="tests-integration/run-integration-test.ts"></script>'
             );
             htmlResult = htmlResult.replace(
               '<link rel="stylesheet" type="text/css" href="./styles/style.css" />',
-              '<link rel="stylesheet" type="text/css" href="./styles/style-test-integration.css" />'
+              ''
             );
 
           }

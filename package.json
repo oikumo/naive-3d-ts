@@ -5,14 +5,14 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "test:integration": "npm i && tsc && vite build && vite --mode test-integration",
+    "test:i": "npm i && tsc && vite build && vite --mode test-integration",
     "dev": "npm i && tsc && vite build && vite",
     "build": "npm i && tsc && vite build",
     "preview": "npm i && tsc && vite build && vite preview",
     "test": "npx tsx run-tests.ts"
   },
   "devDependencies": {
-    "naive-3d-integration-ts": "^0.0.2",
+    "naive-3d-integration-ts": "^0.0.4",
     "naive-blas-wasm": "^1.0.18",
     "naive-tests-ts": "^1.0.34",
     "rollup-plugin-copy": "^3.5.0",

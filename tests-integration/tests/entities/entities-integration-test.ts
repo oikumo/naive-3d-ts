@@ -1,12 +1,11 @@
-import { HtmlLogger } from "naive-3d-integration-ts";
+import { TestLogger } from "naive-3d-integration-ts";
 import { EntityManager } from "../../../src/base/scene/entity-manager";
 import { BlasArrayF32 } from "../../../src/core/blas/blas-array";
 import { IntegrationTestContext } from "../../common/blas-context";
 
-export async function entitiesIntegrationTest(logger: HtmlLogger) {
+export async function entitiesIntegrationTest(logger: TestLogger) {
     const context = await IntegrationTestContext.create();
     
-    throw Error();
     const capacity = 1000;
     const entityManager = new EntityManager(context.blas, new BlasArrayF32(context.blas, capacity));
 
