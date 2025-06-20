@@ -1,12 +1,34 @@
 import { ApplicationContext } from '../../base/application/application-context';
+import { GameObject } from './game-object';
 
-export interface SceneBase {
+export abstract class SceneBase {
 
-    setup(context: ApplicationContext) : void;
+    static instance: SceneBase;
 
-    start(context: ApplicationContext) : void;
+    gameObjects = new Array<GameObject>();
 
-    update(context: ApplicationContext, deltaTime: number) : void;
+    constructor() {
+        SceneBase.instance = this;
+    }
 
-    render(context: ApplicationContext) : void;
+    abstract setup(context: ApplicationContext) : void;
+
+    abstract start(context: ApplicationContext) : void;
+
+    abstract update(context: ApplicationContext, deltaTime: number) : void;
+
+    abstract render(context: ApplicationContext) : void;
+
+
+}
+
+export class SceneObject {
+
+    gameObjects = new Array<GameObject>();
+
+    serialize() {
+        for (let i = 0; i < this.gameObjects.length; i++) {
+            this.gameObjects[i].constructor.name;
+        }
+    }
 }
