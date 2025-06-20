@@ -1,12 +1,21 @@
 import { initialization } from './base/initialization.ts';
 import { Game } from './game/game.ts';
 
-async function init(game: Game) {
-    const application = await initialization(game);
-    application.run();
+class Main {
+    #game: Game;
+
+    constructor(game: Game) {
+        this.#game = game;
+    }
+
+    async init() {
+        const application = await initialization(this.#game);
+        application.run();
+    }
 }
 
-await init(new Game());
+const main = new Main(new Game());
+await main.init();
 
 
   

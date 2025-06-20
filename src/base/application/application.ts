@@ -3,7 +3,7 @@ import { ScreenHtml } from '../screen/screen-html';
 import { ApplicationContext } from './application-context';
 
 export class Application {
-  private screen: ScreenHtml;
+  #screen: ScreenHtml;
   #game: GameBase;
   #context: ApplicationContext;
   #time: number = 0;
@@ -11,7 +11,7 @@ export class Application {
 
   constructor(game: GameBase, context: ApplicationContext) {
     this.#context = context;
-    this.screen = context.screen;
+    this.#screen = context.screen;
     this.#game = game;
   }
 
@@ -26,7 +26,7 @@ export class Application {
       //this.screen.clear();
       this.#game.update(this.#context, this.#deltaTime);
       this.#game.render(this.#context);
-      this.screen.update();
+      this.#screen.update();
       
       now = Date.now() / 1000;
       this.#deltaTime = now - this.#time;

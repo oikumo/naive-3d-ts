@@ -5,24 +5,23 @@ import { UserInputBase } from "../../../base/user/user-input-base";
 import { Vector2 } from "../../../core/types/vector/vector2";
 import { BlasArrayF32, BlasArrayUint32 } from "../../../core/blas/blas-array";
 import { EntityManager } from "../../../base/scene/entity-manager";
+import { Player } from "../../../scripts/player";
 
-export class MainScene implements SceneBase, UserInputBase {
+export class MainScene extends SceneBase implements UserInputBase {
     #mouseLastPosition = new Vector2();
     #cursorTexture: BlasArrayUint32 | null = null;
     #screenTexture: BlasArrayUint32 | null = null;
-
+    entityManager: EntityManager | null = null;
     entity : BlasArrayUint32| null = null;
 
 
-    setup(context: ApplicationContext) {
+    override setup(context: ApplicationContext) {
         context.screen.setMouseObserver(this);
         this.#mouseLastPosition.x = context.screen.width / 2;
         this.#mouseLastPosition.y = context.screen.height / 2;
     }
 
-    entityManager: EntityManager | null = null;
-
-    start(context: ApplicationContext) {
+    override start(context: ApplicationContext) {
     
         this.entity = context.blas.createSharedArray("ELEMENT-1", 10000);
         this.entity.data.fill(Color.blue);
@@ -37,7 +36,9 @@ export class MainScene implements SceneBase, UserInputBase {
         this.entityManager.addEntity(10, 10, 0);
     }
 
-    update(_context: ApplicationContext, deltaTime: number) { 
+    override update(_context: ApplicationContext, deltaTime: number) { 
+        console.log(`gameobjects: ${this.gameObjects.length}`);
+
         if (this.entityManager === null) return;
         const speed =  deltaTime * 10;
         this.entityManager.translateEntity(0, speed, speed, 0);
@@ -47,7 +48,7 @@ export class MainScene implements SceneBase, UserInputBase {
     count = 0;
     offset = 0;
 
-    render(context: ApplicationContext) {
+    override render(context: ApplicationContext) {
         if (this.entityManager === null || this.entity === null || this.#cursorTexture === null || this.#screenTexture === null) return;
         context.screen.clearColor = Color.black;
         context.screen.clear();
@@ -74,6 +75,7 @@ export class MainScene implements SceneBase, UserInputBase {
     }
 
     onActionUp(_x: number, _y: number): void {
+        this.gameObjects.push(new Player());
     }
 
     onMove(x: number, y: number): void {

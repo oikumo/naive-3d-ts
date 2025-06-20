@@ -1,12 +1,12 @@
 import { ApplicationContext } from "../application/application-context";
 
-export interface GameBase {
+export abstract class GameBase {
 
-    setup(context: ApplicationContext) : void;
+    abstract setup(context: ApplicationContext) : void;
 
-    start(context: ApplicationContext) : void;
+    abstract start(context: ApplicationContext) : void;
 
-    update(context: ApplicationContext, deltaTime: number) : void;
+    abstract update(context: ApplicationContext, deltaTime: number) : void;
 
-    render(context: ApplicationContext) : void;
+    abstract render(context: ApplicationContext) : void;
 }
