@@ -1,5 +1,5 @@
 import { Texture } from "../textures/texture";
-import { Vector2 } from "../vector/vector2";
+import { Vector2 } from "../types/vector/vector2";
 
 export class Point2d {
     position: Vector2;

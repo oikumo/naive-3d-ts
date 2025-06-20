@@ -1,0 +1,224 @@
+
+*,
+*::before,
+*::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #6366f1;
+    --success: #22c55e;
+    --danger: #ef4444;
+    --warning: #eab308;
+    --background: #0f172a;
+    --surface: #1e293b;
+    --text: #f8fafc;
+    --border: #334155;
+}
+
+body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background-color: var(--background);
+    color: var(--text);
+    line-height: 1.5;
+    padding: 2rem;
+    min-height: 100vh;
+}
+
+/* Modern header */
+.dashboard-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+    padding: 2rem 0;
+}
+
+.dashboard-header h1 {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(45deg, #818cf8, #6366f1);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+}
+
+/* Grid layout */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: 250px 1fr;
+    gap: 2rem;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* Sidebar navigation */
+.sidebar {
+    background: var(--surface);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    height: fit-content;
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+.nav-list {
+    list-style: none;
+    display: grid;
+    gap: 0.75rem;
+}
+
+.nav-item {
+    padding: 0.75rem 1rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.nav-item:hover {
+    background: rgba(99, 102, 241, 0.1);
+}
+
+/* Test container */
+.test-container {
+    display: grid;
+    gap: 1rem;
+}
+
+/* Modern test card */
+.test-card {
+    background: var(--surface);
+    padding: 1.5rem;
+    border-radius: 1rem;
+    border: 1px solid var(--border);
+    transition: all 0.2s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.test-card::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    background: var(--status, transparent);
+}
+
+.test-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+.test-status {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    font-size: 0.875rem;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+}
+
+.status-success {
+    --status: var(--success);
+    background: rgba(34, 197, 94, 0.1);
+    color: var(--success);
+}
+
+.status-failed {
+    --status: var(--danger);
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+}
+
+.status-pending {
+    --status: var(--warning);
+    background: rgba(234, 179, 8, 0.1);
+    color: var(--warning);
+}
+
+.test-title {
+    font-weight: 600;
+    font-size: 1.125rem;
+    margin-bottom: 0.5rem;
+}
+
+.test-meta {
+    display: flex;
+    gap: 1rem;
+    color: #94a3b8;
+    font-size: 0.875rem;
+    margin-bottom: 1rem;
+}
+
+.test-details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease-out;
+}
+
+.test-card.expanded .test-details {
+    max-height: 500px;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid var(--border);
+}
+
+/* Progress bars */
+.progress-container {
+    background: var(--background);
+    border-radius: 999px;
+    height: 8px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--success) 0%, var(--primary) 100%);
+    transition: width 0.3s ease;
+}
+
+/* Floating action button */
+.fab {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: var(--primary);
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    box-shadow: 0 10px 15px -3px rgba(99, 102, 241, 0.3);
+    transition: all 0.2s ease;
+}
+
+.fab:hover {
+    transform: scale(1.1);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.test-card {
+    animation: fadeIn 0.3s ease forwards;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .dashboard-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .sidebar {
+        display: none;
+    }
+}
