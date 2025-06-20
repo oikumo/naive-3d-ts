@@ -6,11 +6,11 @@ export async function loadBlasModule() {
     try {  
       blas = await blasWasm.default();
     } catch (err) {
-      console.error(err);
+      throw Error('Load BLAS module error');
     }
   
     if (blas === null){
-      return null;
+      throw Error('Load BLAS module error');
     } 
   
     return new Blas(blas);

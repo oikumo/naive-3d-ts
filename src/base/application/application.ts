@@ -18,17 +18,17 @@ export class Application {
   run() {
     this.#game.setup(this.#context);
     this.#game.start(this.#context);
-    let now = Date.now();
+    let now = Date.now() / 1000;
     this.#time = now; 
     this.#deltaTime = 0;
 
     setInterval(() => {
-      this.screen.clear();
+      //this.screen.clear();
       this.#game.update(this.#context, this.#deltaTime);
       this.#game.render(this.#context);
       this.screen.update();
       
-      now = Date.now();
+      now = Date.now() / 1000;
       this.#deltaTime = now - this.#time;
       this.#time = now;
 

@@ -1,5 +1,5 @@
 import { equals, notEquals, test } from "naive-tests-ts";
-import { Vector } from '../../../src/core/vector/vector'
+import { Vector } from '../../../src/core/types/vector/vector'
 
 test('vector creation empty', () => {
     let vector = new Vector();
@@ -8,7 +8,7 @@ test('vector creation empty', () => {
     vector.access((data) => equals(true, data !== null))
 });
 
-test('vector creation with different sizes with default value 0', () => {
+test('vector creation with different sizes with default value 0', (log) => {
     const v1 = Vector.create(10);
     equals(10, v1.length);
 
