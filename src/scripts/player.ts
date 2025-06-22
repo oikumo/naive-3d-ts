@@ -1,8 +1,8 @@
-import { GameObject } from "../base/scene/game-object";
+import { GameObject } from "../base/scene/gameobjects/game-object";
 
 export class Player extends GameObject {
     
     override awake(): void {
-        console.log('player');
+        console.log('player name: ' + this.name);
     }   
 }

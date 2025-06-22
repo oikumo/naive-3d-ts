@@ -4,56 +4,38 @@ import topLevelAwait from "vite-plugin-top-level-await";
 import wasmEsm from 'vite-plugin-wasm-esm'
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 import copy from 'rollup-plugin-copy';
+import { resolve } from 'path';
 
 
 export default defineConfig(({ mode }) => {
 
+  let indexPage = 'index-editor.html';
+  if (mode === 'test-integration') {
+    indexPage = 'index-integration.html';
+  }
+
+  const mainHtml = indexPage;
+
   return {
     assetsInclude: ['**/*.wasm'],
+    build: {
+      rollupOptions: {
+        input: {
+          main: mainHtml
+        }
+      }
+    },
+    server: {
+      open: mainHtml
+    },
     plugins: [
       wasm(),
       topLevelAwait(),
-      /*
-      viteStaticCopy({
-        targets: [
-          {
-            src: 'node_modules/naive-blas-wasm/dist/*.wasm',
-            dest: 'public'
-          }
-        ],
-        watch: {
-          reloadPageOnChange: true
-        }
-      }),*/
       copy({
         targets: [
           { src: 'node_modules/naive-blas-wasm/dist/*.wasm', dest: 'public' }
         ]
-      }),
-      {
-        name: 'customHtmlReplace',
-        transformIndexHtml(html) {
-          let htmlResult = html;
-
-          if (mode === 'test-integration') {
-            htmlResult = htmlResult.replace(
-              '<canvas id="canvas" width="720" height="640" class="naive3dCanvas"></canvas>',
-              ''
-            );
-            htmlResult = htmlResult.replace(
-              '<script type="module" src="src/main.ts"></script>',
-              '<script type="module" src="tests-integration/run-integration-test.ts"></script>'
-            );
-            htmlResult = htmlResult.replace(
-              '<link rel="stylesheet" type="text/css" href="./styles/style.css" />',
-              ''
-            );
-
-          }
-
-          return htmlResult;
-        },
-      },
+      })
     ],
     optimizeDeps: {
       exclude: ["module"],

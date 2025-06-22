@@ -9,6 +9,8 @@ export class Application {
   #time: number = 0;
   #deltaTime: number = 0;
 
+  get game() { return this.#game; }
+
   constructor(game: GameBase, context: ApplicationContext) {
     this.#context = context;
     this.#screen = context.screen;

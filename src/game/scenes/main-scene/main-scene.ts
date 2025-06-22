@@ -5,7 +5,6 @@ import { UserInputBase } from "../../../base/user/user-input-base";
 import { Vector2 } from "../../../core/types/vector/vector2";
 import { BlasArrayF32, BlasArrayUint32 } from "../../../core/blas/blas-array";
 import { EntityManager } from "../../../base/scene/entity-manager";
-import { Player } from "../../../scripts/player";
 
 export class MainScene extends SceneBase implements UserInputBase {
     #mouseLastPosition = new Vector2();
@@ -37,8 +36,7 @@ export class MainScene extends SceneBase implements UserInputBase {
     }
 
     override update(_context: ApplicationContext, deltaTime: number) { 
-        console.log(`gameobjects: ${this.gameObjects.length}`);
-
+        
         if (this.entityManager === null) return;
         const speed =  deltaTime * 10;
         this.entityManager.translateEntity(0, speed, speed, 0);
@@ -75,7 +73,7 @@ export class MainScene extends SceneBase implements UserInputBase {
     }
 
     onActionUp(_x: number, _y: number): void {
-        this.gameObjects.push(new Player());
+        
     }
 
     onMove(x: number, y: number): void {

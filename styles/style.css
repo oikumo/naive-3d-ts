@@ -32,3 +32,42 @@ html {
   width:  100px;
   height: 50px;
 }
+
+.container {
+  display: flex; /* Activates Flexbox */
+  gap: 10px; /* Space between panels */
+  height: 100vh; /* Full viewport height */
+}
+
+.panel {
+  flex: 1; /* Each panel takes equal width */
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-sizing: border-box; /* Includes padding in width calculation */
+}
+
+.panel:first-child {
+  flex: 1.5; /* 2x wider than sibling */
+}
+
+.minimal-btn {
+  padding: 12px 28px;
+  background: transparent;
+  border: 2px solid #2563eb;
+  color: #2563eb;
+  border-radius: 4px;
+  transition: all 0.3s;
+}
+
+.minimal-btn:hover {
+  background: #2563eb;
+  color: white;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+}
+
+.minimal-btn:active {
+  transform: translateY(0);
+  background: #25eb71;
+  color: white;
+  box-shadow: 0 3px 7px rgba(0, 0, 0, 0.15);
+}
