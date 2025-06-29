@@ -31,7 +31,7 @@ export class Vector2 {
     static vector2lerp(v: Vector2, target: Vector2, t = 1) {
         const result = Vector2.vector2Zero();
         result.x = t * (target.x - v.x) + v.x;
-        result.x = t * (target.y - v.y) + v.y;
+        result.y = t * (target.y - v.y) + v.y; // Corrected: result.y instead of result.x
         
         return result;
     }

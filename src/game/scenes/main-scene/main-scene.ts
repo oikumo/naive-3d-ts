@@ -3,6 +3,7 @@ import { ApplicationContext } from '../../../base/application/application-contex
 import { SceneBase } from "../../../base/scene/scene-base";
 import { UserInputBase } from "../../../base/user/user-input-base";
 import { Vector2 } from "../../../core/types/vector/vector2";
+import { Vector3 } from "../../../core/types/vector/vector3"; // Import Vector3
 import { BlasArrayF32, BlasArrayUint32 } from "../../../core/blas/blas-array";
 import { EntityManager } from "../../../base/scene/entity-manager";
 import { Player } from "../../../scripts/player";
@@ -12,7 +13,7 @@ export class MainScene extends SceneBase implements UserInputBase {
     #cursorTexture: BlasArrayUint32 | null = null;
     #screenTexture: BlasArrayUint32 | null = null;
     entityManager: EntityManager | null = null;
-    entity : BlasArrayUint32| null = null;
+    entityElementTexture: BlasArrayUint32 | null = null; // Renamed for clarity
 
 
     override setup(context: ApplicationContext) {
@@ -22,60 +23,86 @@ export class MainScene extends SceneBase implements UserInputBase {
     }
 
     override start(context: ApplicationContext) {
-    
-        this.entity = context.blas.createSharedArray("ELEMENT-1", 10000);
-        this.entity.data.fill(Color.blue);
+        this.entityElementTexture = context.blas.createSharedArray("ELEMENT-1", 10000);
+        if (this.entityElementTexture) {
+            this.entityElementTexture.data.fill(Color.blue);
+        }
 
         this.#cursorTexture = context.blas.createSharedArray("CURSOR", 10000);
-        this.#cursorTexture.data.fill(Color.green);
+        if (this.#cursorTexture) {
+            this.#cursorTexture.data.fill(Color.green);
+        }
 
-        this.entityManager = new EntityManager(context.blas, new BlasArrayF32(context.blas, 100));
+        // Allocate space for more entities, e.g., 10 entities * 3 floats/entity = 30 floats
+        this.entityManager = new EntityManager(context.blas, new BlasArrayF32(context.blas, 3 * 10));
 
         this.#screenTexture = context.blas.getArray("SCREEN_TEXTURE");
 
-        this.entityManager.addEntity(10, 10, 0);
+        // Add initial entity using Vector3
+        this.entityManager.addEntity(new Vector3(10, 10, 0));
     }
 
-    override update(_context: ApplicationContext, deltaTime: number) { 
-        console.log(`gameobjects: ${this.gameObjects.length}`);
+    override update(_context: ApplicationContext, deltaTime: number) {
+        // console.log(`gameobjects: ${this.gameObjects.length}`); // GameObject system not fully active yet
 
-        if (this.entityManager === null) return;
-        const speed =  deltaTime * 10;
-        this.entityManager.translateEntity(0, speed, speed, 0);
+        if (this.entityManager === null || this.entityManager.count === 0) return;
+
+        const speed = deltaTime * 10;
+        // Translate the first entity (index 0)
+        this.entityManager.translateEntity(0, new Vector3(speed, speed, 0));
     }
 
-    
-    count = 0;
-    offset = 0;
+    frameCount = 0; // Renamed from count to avoid conflict with entityManager.count
+    entitySpawnOffset = 0; // Renamed from offset
 
     override render(context: ApplicationContext) {
-        if (this.entityManager === null || this.entity === null || this.#cursorTexture === null || this.#screenTexture === null) return;
+        if (!this.entityManager || !this.entityElementTexture || !this.#cursorTexture || !this.#screenTexture || this.entityManager.count === 0) {
+            return;
+        }
+        
         context.screen.clearColor = Color.black;
         context.screen.clear();
-        
-        if (this.count === 200){
-            this.entityManager.addEntity(this.offset, this.offset, this.offset);
-            this.offset++;
-            this.count = 0;
+
+        // Spawn new entities periodically
+        if (this.frameCount === 200) {
+            this.entityManager.addEntity(new Vector3(this.entitySpawnOffset, this.entitySpawnOffset, this.entitySpawnOffset));
+            this.entitySpawnOffset++;
+            this.frameCount = 0;
         }
+        this.frameCount++;
 
-        this.count++;
+        // Render all entities
+        for (let i = 0; i < this.entityManager.count; i++) {
+            const position = this.entityManager.getEntityPosition(i);
+            if (position && this.#screenTexture && this.entityElementTexture) {
+                context.blas.module.drawTexToTex(
+                    this.#screenTexture.ptr, context.screen.width,
+                    this.entityElementTexture.ptr, 100, 100, // Assuming texture size is 100x100
+                    Math.floor(position.x) + 50, // Offset to center the 100x100 texture
+                    Math.floor(position.y) + 50  // Offset to center the 100x100 texture
+                );
+            }
+        }
         
-
-        const position = this.entityManager.getEntity(0);
-
-        context.blas.module.drawTexToTex(this.#screenTexture.ptr, context.screen.width,
-            this.entity.ptr, 100, 100, 
-            Math.floor(position[0]) + 50, 
-            Math.floor(position[1]) + 50
-        );
-        
-        context.blas.module.drawTexToTex(this.#screenTexture.ptr, context.screen.width,
-            this.#cursorTexture.ptr, 100, 100, this.#mouseLastPosition.x - 50, this.#mouseLastPosition.y - 50);
+        // Render cursor
+        if (this.#screenTexture && this.#cursorTexture) {
+            context.blas.module.drawTexToTex(
+                this.#screenTexture.ptr, context.screen.width,
+                this.#cursorTexture.ptr, 100, 100, // Assuming cursor texture size is 100x100
+                this.#mouseLastPosition.x - 50, // Center cursor
+                this.#mouseLastPosition.y - 50  // Center cursor
+            );
+        }
     }
 
     onActionUp(_x: number, _y: number): void {
-        this.gameObjects.push(new Player());
+        // GameObjects are not fully integrated into update/render loop yet.
+        // For now, just logging or simple interaction.
+        const newPlayer = new Player();
+        this.gameObjects.push(newPlayer);
+        // If GameObject lifecycle (awake, update, render) was implemented in SceneBase,
+        // you would call something like: this.addGameObject(newPlayer, context);
+        console.log("Player object created and added to gameObjects list.");
     }
 
     onMove(x: number, y: number): void {
@@ -84,5 +111,6 @@ export class MainScene extends SceneBase implements UserInputBase {
     }
 
     onActionDown(_x: number, _y: number): void {
+        // Not used currently
     }
 }
