@@ -9,10 +9,14 @@
     "dev": "npm i && tsc && vite build && vite",
     "build": "npm i && tsc && vite build",
     "preview": "npm i && tsc && vite build && vite preview",
-    "test": "npx tsx run-tests.ts"
+    "test": "npx tsx run-tests.ts",
+    "asbuild:debug": "asc assembly/index.ts --target debug",
+    "asbuild:release": "asc assembly/index.ts --target release",
+    "asbuild": "npm run asbuild:debug && npm run asbuild:release",
+    "start": "npx serve ."
   },
   "devDependencies": {
-    "naive-3d-integration-ts": "^0.0.4",
+    "assemblyscript": "^0.28.9",
     "naive-tests-ts": "^1.0.34",
     "rollup-plugin-copy": "^3.5.0",
     "ts-node": "^10.9.2",
@@ -23,5 +27,11 @@
     "vite-plugin-top-level-await": "^1.5.0",
     "vite-plugin-wasm": "^3.1.0",
     "vite-plugin-wasm-esm": "^1.0.3"
+  },
+  "exports": {
+    ".": {
+      "import": "./build/release.js",
+      "types": "./build/release.d.ts"
+    }
   }
 }

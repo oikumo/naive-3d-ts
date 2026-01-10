@@ -1,4 +1,4 @@
-import { TestLogger } from "naive-3d-integration-ts";
+import { TestLogger } from "../../../src/integration-tests-framework";
 import { loadBlasModule } from "../../../src/core/blas/blas-loader";
 
 export async function blasClassesTest(logger: TestLogger) {
@@ -14,5 +14,5 @@ export async function blasClassesTest(logger: TestLogger) {
     }
 
     data.delete;
-    logger.log('class Data instance post delete. ');    
+    logger.log('class Data instance post delete. ');
 }

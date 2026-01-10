@@ -1,9 +1,8 @@
-
-import { LocalBlasModule } from '../src/core/blas/local-blas';
+import loadLocalBlas from '../src/core/blas/local-blas';
 
 async function testLocalBlas() {
     console.log("Starting LocalBlasModule tests...");
-    const blas = new LocalBlasModule();
+    const blas = await loadLocalBlas();
 
     // Test _malloc
     const ptr1 = blas._malloc(100);

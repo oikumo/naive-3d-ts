@@ -1,16 +1,24 @@
 
+
 export class LocalBlasModule {
+    memory: WebAssembly.Memory;
     buffer: ArrayBuffer;
     HEAPU8: Uint8Array;
     HEAPU32: Uint32Array;
     HEAPF32: Float32Array;
     #nextPtr: number = 8; // Start at 8 to avoid null-like pointer 0
+    #exports: any;
 
-    constructor(initialMemorySize: number = 1024 * 1024 * 16) { // 16MB default
-        this.buffer = new ArrayBuffer(initialMemorySize);
+    constructor(wasmExports: any) {
+        this.#exports = wasmExports;
+        this.memory = wasmExports.memory as WebAssembly.Memory;
+        this.buffer = this.memory.buffer;
         this.HEAPU8 = new Uint8Array(this.buffer);
         this.HEAPU32 = new Uint32Array(this.buffer);
         this.HEAPF32 = new Float32Array(this.buffer);
+
+        // Start after the WASM heap base to avoid collisions with internal data
+        this.#nextPtr = wasmExports.__heap_base ? wasmExports.__heap_base.value : 1024;
     }
 
     _malloc(size: number): number {
@@ -28,16 +36,15 @@ export class LocalBlasModule {
         return ptr;
     }
 
-    ccall(name: string, returnType: string | null, argTypes: string[], args: any[]): any {
-        if (name === "modify_array") {
-            return this.modify_array(args[0], args[1], args[2]);
+    ccall(name: string, _returnType: string | null, _argTypes: string[], args: any[]): any {
+        if (this.#exports[name]) {
+            return this.#exports[name](...args);
         }
-        throw new Error(`ccall: function ${name} not implemented`);
+        throw new Error(`ccall: function ${name} not implemented in WASM`);
     }
 
     modify_array(ptr: number, index: number, value: number): void {
-        const uint32View = new Uint32Array(this.buffer, ptr);
-        uint32View[index] = value;
+        this.#exports.modify_array(ptr, index, value);
     }
 
     drawTexToTex(
@@ -49,29 +56,39 @@ export class LocalBlasModule {
         destX: number,
         destY: number
     ): void {
-        const destView = new Uint32Array(this.buffer, destPtr);
-        const srcView = new Uint32Array(this.buffer, srcPtr);
-
-        for (let y = 0; y < srcHeight; y++) {
-            for (let x = 0; x < srcWidth; x++) {
-                const targetX = Math.floor(destX + x);
-                const targetY = Math.floor(destY + y);
-
-                // Basic bounds checking
-                if (targetX >= 0 && targetX < destWidth) {
-                    const destIdx = targetY * destWidth + targetX;
-                    const srcIdx = y * srcWidth + x;
-
-                    // Simple blit - assuming destView is large enough
-                    if (destIdx >= 0 && destIdx < destView.length) {
-                        destView[destIdx] = srcView[srcIdx];
-                    }
-                }
-            }
-        }
+        this.#exports.drawTexToTex(destPtr, destWidth, srcPtr, srcWidth, srcHeight, destX, destY);
     }
 }
 
+const wasmUrl = new URL('./wasm/build/release.wasm', import.meta.url).href;
+
 export default async function loadLocalBlas() {
-    return new LocalBlasModule();
+    let buffer: ArrayBuffer;
+    if (typeof window !== 'undefined') {
+        const response = await fetch(wasmUrl);
+        buffer = await response.arrayBuffer();
+    } else {
+        // Node environment for tests
+        const fs = await import(/* @vite-ignore */ 'fs');
+        const path = await import(/* @vite-ignore */ 'path');
+        const { fileURLToPath } = await import(/* @vite-ignore */ 'url');
+
+        // __dirname is not available in ES modules in all Node versions without this
+        const __filename = fileURLToPath(import.meta.url);
+        const __dirname = path.dirname(__filename);
+
+        const wasmPath = path.resolve(__dirname, './wasm/build/release.wasm');
+        const nodeBuffer = fs.readFileSync(wasmPath);
+        buffer = nodeBuffer.buffer.slice(nodeBuffer.byteOffset, nodeBuffer.byteOffset + nodeBuffer.byteLength);
+    }
+
+    const { instance } = await WebAssembly.instantiate(buffer, {
+        env: {
+            abort: (_msg: any, _file: any, _line: any, _col: any) => {
+                console.error(`abort called`);
+            }
+        }
+    });
+
+    return new LocalBlasModule(instance.exports);
 }
