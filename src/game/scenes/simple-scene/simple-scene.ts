@@ -46,20 +46,27 @@ export class SimpleScene extends SceneBase implements UserInputBase {
         context.screen.clear();
 
         const screenWidth = context.screen.width;
+        const screenHeight = context.screen.height;
         const halfCursor = SimpleScene.CURSOR_SIZE / 2;
         const halfBlock = SimpleScene.BLOCKS_SIZE / 2;
 
         for (const gameObject of this.hierarchy.gameObjects) {
+            const x = Math.max(0, Math.min(gameObject.transform.position.x - halfBlock, screenWidth - SimpleScene.BLOCKS_SIZE));
+            const y = Math.max(0, Math.min(gameObject.transform.position.y - halfBlock, screenHeight - SimpleScene.BLOCKS_SIZE));
+
             context.blas.module.drawTexToTex(
                 this.#screenTexture.ptr,
                 screenWidth,
                 this.#blocksTexture.ptr,
                 SimpleScene.BLOCKS_SIZE,
                 SimpleScene.BLOCKS_SIZE,
-                gameObject.transform.position.x - halfBlock,
-                gameObject.transform.position.y - halfBlock
+                x,
+                y
             );
         }
+
+        const cursorX = Math.max(0, Math.min(this.#mouseLastPosition.x - halfCursor, screenWidth - SimpleScene.CURSOR_SIZE));
+        const cursorY = Math.max(0, Math.min(this.#mouseLastPosition.y - halfCursor, screenHeight - SimpleScene.CURSOR_SIZE));
 
         context.blas.module.drawTexToTex(
             this.#screenTexture.ptr,
@@ -67,8 +74,8 @@ export class SimpleScene extends SceneBase implements UserInputBase {
             this.#cursorTexture.ptr,
             SimpleScene.CURSOR_SIZE,
             SimpleScene.CURSOR_SIZE,
-            this.#mouseLastPosition.x - halfCursor,
-            this.#mouseLastPosition.y - halfCursor
+            cursorX,
+            cursorY
         );
     }
 
