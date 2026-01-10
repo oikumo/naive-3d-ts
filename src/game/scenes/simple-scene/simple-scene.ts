@@ -49,20 +49,26 @@ export class SimpleScene extends SceneBase implements UserInputBase {
         const screenWidth = context.screen.width;
         const screenHeight = context.screen.height;
         const halfCursor = SimpleScene.CURSOR_SIZE / 2;
-        const halfBlock = SimpleScene.BLOCKS_SIZE / 2;
 
         for (const gameObject of this.hierarchy.gameObjects) {
-            const x = Math.max(0, Math.min(gameObject.transform.position.x - halfBlock, screenWidth - SimpleScene.BLOCKS_SIZE));
-            const y = Math.max(0, Math.min(gameObject.transform.position.y - halfBlock, screenHeight - SimpleScene.BLOCKS_SIZE));
+            const scaleX = gameObject.transform.scale.x;
+            const scaleY = gameObject.transform.scale.y;
+            const targetWidth = SimpleScene.BLOCKS_SIZE * scaleX;
+            const targetHeight = SimpleScene.BLOCKS_SIZE * scaleY;
 
-            context.blas.module.drawTexToTex(
+            const x = gameObject.transform.position.x - targetWidth / 2;
+            const y = gameObject.transform.position.y - targetHeight / 2;
+
+            context.blas.module.drawTexToTexScaled(
                 this.#screenTexture.ptr,
                 screenWidth,
                 this.#blocksTexture.ptr,
                 SimpleScene.BLOCKS_SIZE,
                 SimpleScene.BLOCKS_SIZE,
                 x,
-                y
+                y,
+                scaleX,
+                scaleY
             );
         }
 

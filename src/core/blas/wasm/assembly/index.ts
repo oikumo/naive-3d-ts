@@ -36,6 +36,38 @@ export function drawTexToTex(
   }
 }
 
+export function drawTexToTexScaled(
+  destPtr: usize,
+  destWidth: i32,
+  srcPtr: usize,
+  srcWidth: i32,
+  srcHeight: i32,
+  destX: f32,
+  destY: f32,
+  destScaleX: f32,
+  destScaleY: f32
+): void {
+  let targetWidth: i32 = <i32>(<f32>srcWidth * destScaleX);
+  let targetHeight: i32 = <i32>(<f32>srcHeight * destScaleY);
+
+  for (let y: i32 = 0; y < targetHeight; y++) {
+    for (let x: i32 = 0; x < targetWidth; x++) {
+      let srcX: i32 = <i32>(<f32>x / destScaleX);
+      let srcY: i32 = <i32>(<f32>y / destScaleY);
+
+      let targetX: i32 = <i32>Math.floor(destX + <f32>x);
+      let targetY: i32 = <i32>Math.floor(destY + <f32>y);
+
+      if (targetX >= 0 && targetX < destWidth && targetY >= 0) {
+        let destIdx: i32 = targetY * destWidth + targetX;
+        let srcIdx: i32 = srcY * srcWidth + srcX;
+
+        store<u32>(destPtr + (<usize>destIdx << 2), load<u32>(srcPtr + (<usize>srcIdx << 2)));
+      }
+    }
+  }
+}
+
 export function arrayFloat32ModifySegment(destPtr: usize, destIndex: i32, srcPtr: usize, srcLength: i32): void {
   for (let i: i32 = 0; i < srcLength; i++) {
     store<f32>(destPtr + (<usize>(destIndex + i) << 2), load<f32>(srcPtr + (<usize>i << 2)));

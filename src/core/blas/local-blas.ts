@@ -152,6 +152,20 @@ export class LocalBlasModule {
     ): void {
         this.#exports.drawTexToTex(destPtr, destWidth, srcPtr, srcWidth, srcHeight, destX, destY);
     }
+
+    drawTexToTexScaled(
+        destPtr: number,
+        destWidth: number,
+        srcPtr: number,
+        srcWidth: number,
+        srcHeight: number,
+        destX: number,
+        destY: number,
+        destScaleX: number,
+        destScaleY: number
+    ): void {
+        this.#exports.drawTexToTexScaled(destPtr, destWidth, srcPtr, srcWidth, srcHeight, destX, destY, destScaleX, destScaleY);
+    }
 }
 
 const wasmUrl = new URL('./wasm/build/release.wasm', import.meta.url).href;
