@@ -1,4 +1,4 @@
-import { MainModule } from "naive-blas-wasm";
+import { LocalBlasModule } from "./local-blas";
 import { Blas } from "./blas";
 
 export class BlasArrayF32 {
@@ -18,16 +18,16 @@ export class BlasArrayF32 {
             length);
 
         const initialView = this.view;
-            for (let i = 0; i < this.length; i++) {
+        for (let i = 0; i < this.length; i++) {
             initialView[i] = NaN;
         }
     }
 
     get view() {
         return new Float32Array(
-        this.blas.module.HEAPU8.buffer, // Always fresh reference
-        this.ptr,
-        this.length);
+            this.blas.module.HEAPU8.buffer, // Always fresh reference
+            this.ptr,
+            this.length);
     }
 }
 
@@ -36,7 +36,7 @@ export class BlasArrayUint32 {
     ptr: number = 0;
     data: Uint32Array;
 
-    constructor(blas: MainModule, length: number) {
+    constructor(blas: LocalBlasModule, length: number) {
         this.length = length;
         this.ptr = blas._malloc(length * Uint32Array.BYTES_PER_ELEMENT);
 
