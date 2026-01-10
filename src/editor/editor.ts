@@ -1,4 +1,5 @@
 import { Application } from "../base/application/application";
+import { GameObject } from "../base/scene/gameobjects/game-object";
 import { Player } from "../game/scenes/main-scene/player";
 import { EditorUI } from "./editor-ui";
 
@@ -6,7 +7,7 @@ export class Editor {
 
     #editorUi: EditorUI;
     private application: Application;
-    #selectedGameObject: Player | null = null;
+    #selectedGameObject: GameObject | null = null;
 
     constructor(application: Application) {
         this.application = application;
@@ -18,7 +19,7 @@ export class Editor {
     }
 
     getSceneName() {
-        return this.application.game.getScene()!.getName();
+        return this.application.game.getScene()?.getName() || "No Scene";
     }
 
     get selectedGameObject() {
@@ -30,7 +31,7 @@ export class Editor {
             this.#selectedGameObject = null;
         } else {
             const go = this.getHierarchy().find(g => g.id === id);
-            this.#selectedGameObject = go as Player || null;
+            this.#selectedGameObject = go || null;
         }
         this.#editorUi.updatePanelHierarchy();
         this.#editorUi.updateInspector();
@@ -43,6 +44,20 @@ export class Editor {
         this.application.game.getScene()!.hierarchy.addGameObject(go);
 
         this.#editorUi.updatePanelHierarchy();
+    }
+
+    duplicateSelectedGameObject() {
+        if (!this.#selectedGameObject) return;
+
+        const original = this.#selectedGameObject;
+        // Simple duplication for now, could be more robust
+        const clone = new Player(`${original.name} (Copy)`);
+        clone.transform.position.x = original.transform.position.x + 20;
+        clone.transform.position.y = original.transform.position.y + 20;
+
+        this.application.game.getScene()!.hierarchy.addGameObject(clone);
+        this.#editorUi.updatePanelHierarchy();
+        this.selectGameObject(clone.id);
     }
 
     getHierarchy() {

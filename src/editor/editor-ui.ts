@@ -47,7 +47,7 @@ export class EditorUI {
 
         if (!selectedGo) {
             inspectorContent!.innerHTML = `
-                <div style="color: #666; font-style: italic; text-align: center; margin-top: 20px;">
+                <div class="inspector-empty-state">
                     Select an object to see its properties
                 </div>`;
             return;
@@ -55,7 +55,15 @@ export class EditorUI {
 
         inspectorContent!.innerHTML = `
             <div class="inspector-group">
-                <div class="panel-header" style="background: none; padding-left: 0; margin-bottom: 10px;">Transform</div>
+                <div class="inspector-group-header">Identity</div>
+                <div class="inspector-row">
+                    <span class="inspector-label">Name</span>
+                    <input type="text" id="inp-go-name" class="inspector-input" value="${selectedGo.name}">
+                </div>
+            </div>
+
+            <div class="inspector-group">
+                <div class="inspector-group-header">Transform</div>
                 <div class="inspector-row">
                     <span class="inspector-label">Pos X</span>
                     <input type="number" id="inp-pos-x" class="inspector-input" value="${selectedGo.transform.position.x}">
@@ -65,14 +73,24 @@ export class EditorUI {
                     <input type="number" id="inp-pos-y" class="inspector-input" value="${selectedGo.transform.position.y}">
                 </div>
             </div>
+
             <div class="inspector-group">
-                 <div class="panel-header" style="background: none; padding-left: 0; margin-bottom: 10px;">Actions</div>
-                 <button id="btn-delete-go" class="minimal-btn" style="background-color: #d32f2f; width: 100%;">Delete</button>
+                 <div class="inspector-group-header">Actions</div>
+                 <div style="display: flex; gap: 8px;">
+                    <button id="btn-duplicate-go" class="minimal-btn" style="flex: 1;">Duplicate</button>
+                    <button id="btn-delete-go" class="minimal-btn danger" style="flex: 1;">Delete</button>
+                 </div>
             </div>
         `;
 
+        const inpName = document.getElementById('inp-go-name') as HTMLInputElement;
         const inpX = document.getElementById('inp-pos-x') as HTMLInputElement;
         const inpY = document.getElementById('inp-pos-y') as HTMLInputElement;
+
+        inpName.oninput = (e) => {
+            selectedGo.name = (e.target as HTMLInputElement).value;
+            this.updatePanelHierarchy();
+        };
 
         inpX.oninput = (e) => {
             selectedGo.transform.position.x = parseFloat((e.target as HTMLInputElement).value) || 0;
@@ -81,10 +99,14 @@ export class EditorUI {
             selectedGo.transform.position.y = parseFloat((e.target as HTMLInputElement).value) || 0;
         };
 
+        const duplicateBtn = document.getElementById('btn-duplicate-go');
+        duplicateBtn!.onclick = () => {
+            this.#editor.duplicateSelectedGameObject();
+        };
+
         const deleteBtn = document.getElementById('btn-delete-go');
         deleteBtn!.onclick = () => {
-            // To be implemented in editor.ts
-            (this.#editor as any).deleteSelectedGameObject();
+            this.#editor.deleteSelectedGameObject();
         };
     }
 }
