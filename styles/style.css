@@ -147,11 +147,110 @@ body {
   color: var(--accent-color);
 }
 
-.inspector-row {
+.toolbar-tools {
+  display: flex;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+}
+
+.tool-btn {
+  padding: 6px 12px;
+  background: transparent;
+  border: none;
+  color: var(--text-dim);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
+  gap: 6px;
+}
+
+.tool-btn span {
+  font-size: 14px;
+}
+
+/* Dropdown menu */
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  right: 0;
+  background-color: var(--panel-bg);
+  min-width: 160px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  border-radius: 8px;
+  border: 1px solid var(--border-color);
+  backdrop-filter: blur(var(--glass-blur));
+  margin-top: 4px;
+  overflow: hidden;
+}
+
+.dropdown-content.show {
+  display: block;
+}
+
+.menu-item {
+  color: var(--text-color);
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+  background: transparent;
+  border: none;
+  width: 100%;
+  text-align: left;
+  font-size: 12px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.menu-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+}
+
+.menu-item:active {
+  background-color: var(--accent-color);
+}
+
+.tool-btn:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-color);
+}
+
+.tool-btn.active {
+  background: var(--accent-color);
+  color: white;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.3);
+}
+
+.inspector-row-multi {
+  display: flex;
+  gap: 8px;
   margin-bottom: 10px;
-  gap: 12px;
+}
+
+.inspector-field {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 10px;
+  color: var(--text-dim);
+  font-weight: 700;
+  width: 12px;
 }
 
 .inspector-label {

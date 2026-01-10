@@ -10,11 +10,34 @@
 </head>
 
 <body>
-    <script type="module" src="src/main.ts"></script>
     <div class="editor-layout">
         <header class="toolbar">
             <div id="editor-scene-name" style="font-weight: bold; margin-right: 20px;"></div>
-            <button id="editor-btn-add" class="minimal-btn">Add Player</button>
+
+            <div class="toolbar-tools">
+                <button id="tool-move" class="tool-btn active" title="Move Tool (W)">
+                    <span>󰆾</span> Move
+                </button>
+                <button id="tool-rotate" class="tool-btn" title="Rotate Tool (E)">
+                    <span>󰑐</span> Rotate
+                </button>
+                <button id="tool-scale" class="tool-btn" title="Scale Tool (R)">
+                    <span>󰆽</span> Scale
+                </button>
+            </div>
+
+            <div style="flex: 1;"></div>
+
+            <div class="dropdown">
+                <button id="editor-btn-create" class="minimal-btn">
+                    <span>󰐕</span> Create ▾
+                </button>
+                <div id="create-menu" class="dropdown-content">
+                    <button class="menu-item" data-type="empty">Empty Object</button>
+                    <button class="menu-item" data-type="sprite">Sprite</button>
+                    <button class="menu-item" data-type="player">Player</button>
+                </div>
+            </div>
         </header>
 
         <aside class="panel hierarchy">
@@ -35,6 +58,7 @@
             </div>
         </aside>
     </div>
+    <script type="module" src="src/main.ts"></script>
 </body>
 
 </html>

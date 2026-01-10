@@ -1,4 +1,4 @@
-import { Editor } from "./editor";
+import { Editor, EditorTool } from "./editor";
 
 export class EditorUI {
 
@@ -7,17 +7,81 @@ export class EditorUI {
     constructor(editor: Editor) {
         this.#editor = editor;
 
-        const addBtn = document.getElementById('editor-btn-add');
-        addBtn!.onclick = this.addGameObject.bind(this);
+        this.initCreateMenu();
+        this.initToolbar();
+    }
+
+    initCreateMenu() {
+        const createBtn = document.getElementById('editor-btn-create');
+        const createMenu = document.getElementById('create-menu');
+
+        if (!createBtn || !createMenu) {
+            console.warn('Editor UI: Create menu elements not found. Check index.html');
+            return;
+        }
+
+        createBtn.onclick = (e) => {
+            e.stopPropagation();
+            createMenu.classList.toggle('show');
+        };
+
+        window.onclick = () => {
+            createMenu.classList.remove('show');
+        };
+
+        const menuItems = createMenu.querySelectorAll('.menu-item');
+        menuItems.forEach(item => {
+            (item as HTMLButtonElement).onclick = () => {
+                const type = (item as HTMLButtonElement).dataset.type || 'player';
+                this.#editor.addGameObject(type);
+                createMenu.classList.remove('show');
+            };
+        });
+    }
+
+    initToolbar() {
+        ['move', 'rotate', 'scale'].forEach(tool => {
+            const btn = document.getElementById(`tool-${tool}`);
+            if (btn) {
+                btn.onclick = () => {
+                    this.#editor.currentTool = tool as EditorTool;
+                };
+            }
+        });
+
+        // Add keyboard shortcuts
+        window.addEventListener('keydown', (e) => {
+            if (e.target instanceof HTMLInputElement) return;
+
+            if (e.key.toLowerCase() === 'w') this.#editor.currentTool = 'move';
+            if (e.key.toLowerCase() === 'e') this.#editor.currentTool = 'rotate';
+            if (e.key.toLowerCase() === 'r') this.#editor.currentTool = 'scale';
+        });
+    }
+
+    updateToolbar() {
+        ['move', 'rotate', 'scale'].forEach(tool => {
+            const btn = document.getElementById(`tool-${tool}`);
+            if (btn) {
+                if (this.#editor.currentTool === tool) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            }
+        });
     }
 
     show() {
         this.updateHeader();
+        this.updateToolbar();
     }
 
     updateHeader() {
         const sceneName = document.getElementById('editor-scene-name');
-        sceneName!.innerHTML = `${this.#editor.getSceneName()} (${this.#editor.getHierarchy().length})`;
+        if (sceneName) {
+            sceneName.innerHTML = `${this.#editor.getSceneName()} (${this.#editor.getHierarchy().length})`;
+        }
     }
 
     addGameObject() {
@@ -26,14 +90,21 @@ export class EditorUI {
 
     updatePanelHierarchy() {
         const list = document.getElementById('editor-list-game-objects');
-        list!.innerHTML = '';
+        if (!list) return;
+        list.innerHTML = '';
 
         const selectedGo = this.#editor.selectedGameObject;
 
         this.#editor.getHierarchy().forEach(go => {
             const element = document.createElement('div');
             element.className = 'hierarchy-item' + (selectedGo?.id === go.id ? ' selected' : '');
-            element.innerText = go.name || go.id;
+
+            let icon = '󰆾'; // Default
+            if (go.constructor.name.includes('Player')) icon = '󰙊';
+            if (go.constructor.name.includes('Sprite')) icon = '󰋩';
+            if (go.constructor.name.includes('Empty')) icon = '󰆧';
+
+            element.innerHTML = `<span style="margin-right: 8px; opacity: 0.6;">${icon}</span>${go.name || go.id}`;
             element.onclick = () => this.#editor.selectGameObject(go.id);
             list?.appendChild(element);
         });
@@ -43,6 +114,8 @@ export class EditorUI {
 
     updateInspector() {
         const inspectorContent = document.getElementById('editor-inspector-content');
+        if (!inspectorContent) return;
+
         const selectedGo = this.#editor.selectedGameObject;
 
         if (!selectedGo) {
@@ -64,13 +137,34 @@ export class EditorUI {
 
             <div class="inspector-group">
                 <div class="inspector-group-header">Transform</div>
-                <div class="inspector-row">
-                    <span class="inspector-label">Pos X</span>
-                    <input type="number" id="inp-pos-x" class="inspector-input" value="${selectedGo.transform.position.x}">
+                
+                <div class="inspector-label">Position</div>
+                <div class="inspector-row-multi">
+                    <div class="inspector-field">
+                        <span class="field-label">X</span>
+                        <input type="number" id="inp-pos-x" class="inspector-input" value="${selectedGo.transform.position.x}">
+                    </div>
+                    <div class="inspector-field">
+                        <span class="field-label">Y</span>
+                        <input type="number" id="inp-pos-y" class="inspector-input" value="${selectedGo.transform.position.y}">
+                    </div>
                 </div>
+
+                <div class="inspector-label">Rotation</div>
                 <div class="inspector-row">
-                    <span class="inspector-label">Pos Y</span>
-                    <input type="number" id="inp-pos-y" class="inspector-input" value="${selectedGo.transform.position.y}">
+                    <input type="number" id="inp-rot" class="inspector-input" value="${selectedGo.transform.rotation}">
+                </div>
+
+                <div class="inspector-label" style="margin-top: 4px;">Scale</div>
+                <div class="inspector-row-multi">
+                    <div class="inspector-field">
+                        <span class="field-label">X</span>
+                        <input type="number" id="inp-scale-x" class="inspector-input" value="${selectedGo.transform.scale.x}">
+                    </div>
+                    <div class="inspector-field">
+                        <span class="field-label">Y</span>
+                        <input type="number" id="inp-scale-y" class="inspector-input" value="${selectedGo.transform.scale.y}">
+                    </div>
                 </div>
             </div>
 
@@ -83,20 +177,27 @@ export class EditorUI {
             </div>
         `;
 
-        const inpName = document.getElementById('inp-go-name') as HTMLInputElement;
-        const inpX = document.getElementById('inp-pos-x') as HTMLInputElement;
-        const inpY = document.getElementById('inp-pos-y') as HTMLInputElement;
+        const getInp = (id: string) => document.getElementById(id) as HTMLInputElement;
 
-        inpName.oninput = (e) => {
+        getInp('inp-go-name').oninput = (e) => {
             selectedGo.name = (e.target as HTMLInputElement).value;
             this.updatePanelHierarchy();
         };
 
-        inpX.oninput = (e) => {
+        getInp('inp-pos-x').oninput = (e) => {
             selectedGo.transform.position.x = parseFloat((e.target as HTMLInputElement).value) || 0;
         };
-        inpY.oninput = (e) => {
+        getInp('inp-pos-y').oninput = (e) => {
             selectedGo.transform.position.y = parseFloat((e.target as HTMLInputElement).value) || 0;
+        };
+        getInp('inp-rot').oninput = (e) => {
+            selectedGo.transform.rotation = parseFloat((e.target as HTMLInputElement).value) || 0;
+        };
+        getInp('inp-scale-x').oninput = (e) => {
+            selectedGo.transform.scale.x = parseFloat((e.target as HTMLInputElement).value) || 0;
+        };
+        getInp('inp-scale-y').oninput = (e) => {
+            selectedGo.transform.scale.y = parseFloat((e.target as HTMLInputElement).value) || 0;
         };
 
         const duplicateBtn = document.getElementById('btn-duplicate-go');

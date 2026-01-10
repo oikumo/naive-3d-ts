@@ -4,6 +4,7 @@ import { SceneBase } from "../../../base/scene/scene-base";
 import { UserInputBase } from "../../../base/user/user-input-base";
 import { Vector2 } from "../../../core/types/vector/vector2";
 import { BlasArrayUint32 } from "../../../core/blas/blas-array";
+import { Editor } from "../../../editor/editor";
 
 export class SimpleScene extends SceneBase implements UserInputBase {
     static readonly CURSOR_SIZE = 100;
@@ -80,13 +81,16 @@ export class SimpleScene extends SceneBase implements UserInputBase {
     }
 
     onActionUp(_x: number, _y: number): void {
+        Editor.instance.handleMouseUp();
     }
 
     onMove(x: number, y: number): void {
         this.#mouseLastPosition.x = x;
         this.#mouseLastPosition.y = y;
+        Editor.instance.handleMouseMove(x, y);
     }
 
-    onActionDown(_x: number, _y: number): void {
+    onActionDown(x: number, y: number): void {
+        Editor.instance.handleMouseDown(x, y);
     }
 }
