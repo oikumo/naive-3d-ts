@@ -1,10 +1,40 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 
 <head>
-    <script type="module" src="src/main.ts"></script>
+    <title>Naive 3D</title>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link rel="stylesheet" type="text/css" href="./styles/style.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 </head>
 
-<body></body>
+<body>
+    <script type="module" src="src/main.ts"></script>
+    <div class="editor-layout">
+        <header class="toolbar">
+            <div id="editor-scene-name" style="font-weight: bold; margin-right: 20px;"></div>
+            <button id="editor-btn-add" class="minimal-btn">Add Player</button>
+        </header>
+
+        <aside class="panel hierarchy">
+            <div class="panel-header">Hierarchy</div>
+            <div id="editor-list-game-objects" class="panel-content"></div>
+        </aside>
+
+        <main class="viewport">
+            <canvas id="canvas" width="720" height="640" class="naive3dCanvas"></canvas>
+        </main>
+
+        <aside class="panel inspector">
+            <div class="panel-header">Inspector</div>
+            <div id="editor-inspector-content" class="panel-content">
+                <div class="inspector-empty-state">
+                    Select an object to see its properties
+                </div>
+            </div>
+        </aside>
+    </div>
+</body>
 
 </html>

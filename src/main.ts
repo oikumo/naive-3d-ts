@@ -16,11 +16,21 @@ class Main {
     }
 }
 
-const main = new Main(new Game());
-const application = await main.init();
-const editor = new Editor(application);
-editor.show();
+(async () => {
+    try {
+        const main = new Main(new Game());
+        const application = await main.init();
+        const editor = new Editor(application);
+        editor.show();
+    } catch (e: any) {
+        console.error(e);
+        document.body.innerHTML = `<div style="color: red; padding: 20px; font-family: monospace; white-space: pre-wrap; background: #333;">
+            <h2>Error Initializing Game</h2>
+            ${e.message}\n${e.stack}
+        </div>`;
+    }
+})();
 
 
-  
+
 

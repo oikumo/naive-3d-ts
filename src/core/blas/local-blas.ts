@@ -2,10 +2,40 @@
 
 export class LocalBlasModule {
     memory: WebAssembly.Memory;
+
+    #lastBufferReference: ArrayBuffer | null = null;
+    #cachedHEAPU8: Uint8Array | null = null;
+    #cachedHEAPU32: Uint32Array | null = null;
+    #cachedHEAPF32: Float32Array | null = null;
+
     get buffer() { return this.memory.buffer; }
-    get HEAPU8() { return new Uint8Array(this.buffer); }
-    get HEAPU32() { return new Uint32Array(this.buffer); }
-    get HEAPF32() { return new Float32Array(this.buffer); }
+
+    get HEAPU8() {
+        this.#checkBuffer();
+        if (!this.#cachedHEAPU8) this.#cachedHEAPU8 = new Uint8Array(this.buffer);
+        return this.#cachedHEAPU8;
+    }
+
+    get HEAPU32() {
+        this.#checkBuffer();
+        if (!this.#cachedHEAPU32) this.#cachedHEAPU32 = new Uint32Array(this.buffer);
+        return this.#cachedHEAPU32;
+    }
+
+    get HEAPF32() {
+        this.#checkBuffer();
+        if (!this.#cachedHEAPF32) this.#cachedHEAPF32 = new Float32Array(this.buffer);
+        return this.#cachedHEAPF32;
+    }
+
+    #checkBuffer() {
+        if (this.buffer !== this.#lastBufferReference) {
+            this.#lastBufferReference = this.buffer;
+            this.#cachedHEAPU8 = null;
+            this.#cachedHEAPU32 = null;
+            this.#cachedHEAPF32 = null;
+        }
+    }
 
     #nextPtr: number = 8; // Start at 8 to avoid null-like pointer 0
     #exports: any;
@@ -14,6 +44,9 @@ export class LocalBlasModule {
 
     constructor(wasmExports: any) {
         this.#exports = wasmExports;
+        if (!wasmExports.memory) {
+            throw new Error("WASM module must export 'memory'. Please check your AssemblyScript compilation settings.");
+        }
         this.memory = wasmExports.memory as WebAssembly.Memory;
 
         // Copy exports to this instance for direct access, except special ones

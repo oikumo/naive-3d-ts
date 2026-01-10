@@ -5,6 +5,9 @@ export class BlasArrayF32 {
     ptr: number = 0;
     blas: Blas;
 
+    #cachedData: Float32Array | null = null;
+    #lastBufferReference: ArrayBuffer | null = null;
+
     constructor(blas: Blas, length: number) {
         this.blas = blas;
         this.length = length;
@@ -17,10 +20,14 @@ export class BlasArrayF32 {
     }
 
     get data() {
-        return new Float32Array(
-            this.blas.module.HEAPU8.buffer,
-            this.ptr,
-            this.length);
+        if (this.blas.module.buffer !== this.#lastBufferReference || !this.#cachedData) {
+            this.#lastBufferReference = this.blas.module.buffer;
+            this.#cachedData = new Float32Array(
+                this.#lastBufferReference,
+                this.ptr,
+                this.length);
+        }
+        return this.#cachedData;
     }
 }
 
@@ -29,6 +36,9 @@ export class BlasArrayUint32 {
     ptr: number = 0;
     blas: Blas;
 
+    #cachedData: Uint32Array | null = null;
+    #lastBufferReference: ArrayBuffer | null = null;
+
     constructor(blas: Blas, length: number) {
         this.blas = blas;
         this.length = length;
@@ -36,9 +46,13 @@ export class BlasArrayUint32 {
     }
 
     get data() {
-        return new Uint32Array(
-            this.blas.module.HEAPU8.buffer,
-            this.ptr,
-            this.length);
+        if (this.blas.module.buffer !== this.#lastBufferReference || !this.#cachedData) {
+            this.#lastBufferReference = this.blas.module.buffer;
+            this.#cachedData = new Uint32Array(
+                this.#lastBufferReference,
+                this.ptr,
+                this.length);
+        }
+        return this.#cachedData;
     }
 }
