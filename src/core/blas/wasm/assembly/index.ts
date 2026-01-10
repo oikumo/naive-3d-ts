@@ -4,6 +4,14 @@ export function modify_array(ptr: usize, index: i32, value: u32): void {
   store<u32>(ptr + (index << 2), value);
 }
 
+export function draw(val: i32): i32 {
+  return val;
+}
+
+export function int_sqrt(val: i32): i32 {
+  return <i32>Math.sqrt(<f64>val);
+}
+
 export function drawTexToTex(
   destPtr: usize,
   destWidth: i32,
@@ -38,5 +46,26 @@ export function multiply(scalar: f32, ptr: usize, length: i32): void {
   for (let i: i32 = 0; i < length; i++) {
     let val = load<f32>(ptr + (<usize>i << 2));
     store<f32>(ptr + (<usize>i << 2), val * scalar);
+  }
+}
+
+export class Data {
+  private _array: Uint32Array | null = null;
+
+  createArray(length: i32): void {
+    this._array = new Uint32Array(length);
+  }
+
+  set(index: i32, value: u32): void {
+    if (this._array) {
+      this._array![index] = value;
+    }
+  }
+
+  get(index: i32): u32 {
+    if (this._array) {
+      return this._array![index];
+    }
+    return 0;
   }
 }

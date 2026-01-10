@@ -4,8 +4,6 @@ import { loadBlasModule } from "../../../src/core/blas/blas-loader";
 export async function blasClassesTest(logger: TestLogger) {
     const blas = await loadBlasModule();
 
-    throw Error();
-
     const data = new blas.module.Data();
     data.createArray(100000);
 

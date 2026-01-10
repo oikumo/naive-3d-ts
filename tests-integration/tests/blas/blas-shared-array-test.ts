@@ -15,7 +15,6 @@ function logArray(array: BlasArrayUint32) {
 export async function blasSharedArrayTest(logger: TestLogger) {
     const blas = await loadBlasModule();
 
-    throw Error();
 
     const array = blas.createSharedArray("TEST_1", 10);
     if (array.data === null) throw Error();

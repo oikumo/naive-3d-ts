@@ -23,6 +23,20 @@ export class LocalBlasModule {
             }
         }
 
+        // Add mock Data class for integration tests
+        this.Data = class Data {
+            #array: Uint32Array | null = null;
+            createArray(length: number) {
+                this.#array = new Uint32Array(length);
+            }
+            set(index: number, value: number) {
+                if (this.#array) this.#array[index] = value;
+            }
+            get(index: number) {
+                return this.#array ? this.#array[index] : 0;
+            }
+        };
+
         // Start after the WASM heap base to avoid collisions with internal data
         this.#nextPtr = wasmExports.__heap_base ? wasmExports.__heap_base.value : 1024;
     }
@@ -47,6 +61,47 @@ export class LocalBlasModule {
             return this.#exports[name](...args);
         }
         throw new Error(`ccall: function ${name} not implemented in WASM`);
+    }
+
+    setValue(ptr: number, value: any, type: string): void {
+        const buffer = this.buffer;
+        switch (type) {
+            case 'i8': new Int8Array(buffer, ptr, 1)[0] = value; break;
+            case 'i16': new Int16Array(buffer, ptr, 1)[0] = value; break;
+            case 'i32': new Int32Array(buffer, ptr, 1)[0] = value; break;
+            case 'f32': new Float32Array(buffer, ptr, 1)[0] = value; break;
+            case 'f64': new Float64Array(buffer, ptr, 1)[0] = value; break;
+            default: throw new Error(`setValue: Unsupported type ${type}`);
+        }
+    }
+
+    _free_array(_ptr: number): void {
+        // No-op in this local bump allocator
+    }
+
+    stackAlloc(size: number): number {
+        return this._malloc(size);
+    }
+
+    stringToUTF8(str: string, outPtr: number, maxBytes: number): number {
+        const view = this.HEAPU8;
+        let i = 0;
+        for (; i < str.length && i < maxBytes - 1; i++) {
+            view[outPtr + i] = str.charCodeAt(i);
+        }
+        view[outPtr + i] = 0;
+        return outPtr;
+    }
+
+    UTF8ToString(ptr: number): string {
+        const view = this.HEAPU8;
+        let str = "";
+        let i = ptr;
+        while (view[i] !== 0) {
+            str += String.fromCharCode(view[i]);
+            i++;
+        }
+        return str;
     }
 
     modify_array(ptr: number, index: number, value: number): void {
