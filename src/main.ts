@@ -16,11 +16,10 @@ class Main {
     }
 }
 
-
-
 const main = new Main(new Game());
 const application = await main.init();
-new Editor(application);
+const editor = new Editor(application);
+editor.show();
 
 
   

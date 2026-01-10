@@ -1,5 +1,5 @@
 import { Application } from "../base/application/application";
-import { Player } from "../scripts/player";
+import { Player } from "../game/scenes/main-scene/player";
 import { EditorUI } from "./editor-ui";
 
 export class Editor {
@@ -13,8 +13,22 @@ export class Editor {
         this.#editorUi = new EditorUI(this);
     }
 
+    show() {
+        this.#editorUi.show();
+    }
+
+    getSceneName() {
+        return this.application.game.getScene()!.getName();
+    }
+
     addGameObject() {
-        this.application.game.getScene()!.hierarchy.addGameObject(new Player('player'));
+        for (let i = 0; i < 100; i++) {
+            const go = new Player('player');
+            go.transform.position.x = Math.floor(50 + (Math.random() * (200)));
+            go.transform.position.y = Math.floor(50 + (Math.random() * (200)));
+            this.application.game.getScene()!.hierarchy.addGameObject(go);
+        }
+
         this.#editorUi.updatePanelHierarchy();
     }
 

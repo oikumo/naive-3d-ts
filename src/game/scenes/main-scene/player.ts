@@ -1,4 +1,4 @@
-import { GameObject } from "../base/scene/gameobjects/game-object";
+import { GameObject } from "../../../base/scene/gameobjects/game-object";
 
 export class Player extends GameObject {
     

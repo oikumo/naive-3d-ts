@@ -5,11 +5,16 @@ export abstract class SceneBase {
 
     static instance: SceneBase;
 
-    constructor() {
+    protected name: string;
+
+    constructor(name: string) {
         SceneBase.instance = this;
+        this.name = name;
     }
 
     #hierarchy = new SceneHierarchy();
+
+    getName() { return this.name; }
 
     get hierarchy() { return this.#hierarchy; }
 

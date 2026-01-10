@@ -11,6 +11,11 @@ export class EditorUI {
         start!.onclick = this.addGameObject.bind(this);
     }
 
+    show() {
+        const sceneName = document.getElementById('editor-scene-name');
+        sceneName!.innerHTML = this.#editor.getSceneName();
+    }
+
     addGameObject() {
         this.#editor.addGameObject();
     }
@@ -24,5 +29,8 @@ export class EditorUI {
             element.innerHTML = `<p>${go.id}</p>`;
             list?.appendChild(element);
         });
+
+        const sceneName = document.getElementById('editor-scene-name');
+        sceneName!.innerHTML = this.#editor.getSceneName() + ' #go: ' + this.#editor.getHierarchy().length;
     }
 }

@@ -1,12 +1,12 @@
 import { ApplicationContext } from "../base/application/application-context";
 import { GameBase } from "../base/game/game-base";
-import { MainScene } from "./scenes/main-scene/main-scene";
+import { SimpleScene } from "./scenes/simple-scene/simple-scene";
 
 export class Game extends GameBase {
     
     constructor() {
         super();
-        this.scene = new MainScene();
+        this.scene = new SimpleScene();
     }
 
     override setup(context: ApplicationContext) {
