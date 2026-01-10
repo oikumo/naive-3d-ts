@@ -19,7 +19,7 @@ export class BlasArrayF32 {
 
         const initialView = this.view;
         for (let i = 0; i < this.length; i++) {
-            initialView[i] = NaN;
+            initialView[i] = 0;
         }
     }
 

@@ -9,6 +9,8 @@ export class LocalBlasModule {
     #nextPtr: number = 8; // Start at 8 to avoid null-like pointer 0
     #exports: any;
 
+    [key: string]: any;
+
     constructor(wasmExports: any) {
         this.#exports = wasmExports;
         this.memory = wasmExports.memory as WebAssembly.Memory;
@@ -16,6 +18,13 @@ export class LocalBlasModule {
         this.HEAPU8 = new Uint8Array(this.buffer);
         this.HEAPU32 = new Uint32Array(this.buffer);
         this.HEAPF32 = new Float32Array(this.buffer);
+
+        // Copy exports to this instance for direct access, except special ones
+        for (const key in wasmExports) {
+            if (key !== 'memory') {
+                this[key] = wasmExports[key];
+            }
+        }
 
         // Start after the WASM heap base to avoid collisions with internal data
         this.#nextPtr = wasmExports.__heap_base ? wasmExports.__heap_base.value : 1024;
