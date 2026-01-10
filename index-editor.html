@@ -9,15 +9,29 @@
   </head>
   <body>
     <script type="module" src="src/main.ts"></script>
-    <div class="container">
-      <div class="panel panel:first-child">
+    <div class="editor-layout">
+      <header class="toolbar">
+        <div id="editor-scene-name" style="font-weight: bold; margin-right: 20px;"></div>
+        <button id="editor-btn-add" class="minimal-btn">Add Player</button>
+      </header>
+
+      <aside class="panel hierarchy">
+        <div class="panel-header">Hierarchy</div>
+        <div id="editor-list-game-objects" class="panel-content"></div>
+      </aside>
+
+      <main class="viewport">
         <canvas id="canvas" width="720" height="640" class="naive3dCanvas"></canvas>
-      </div>
-      <div class="panel">
-        <div id="editor-scene-name"></div>
-        <button id="editor-btn-start" class="minimal-btn">Start</button>
-        <ul id="editor-list-game-objects"></ul>
-      </div>
+      </main>
+
+      <aside class="panel inspector">
+        <div class="panel-header">Inspector</div>
+        <div id="editor-inspector-content" class="panel-content">
+          <div style="color: #666; font-style: italic; text-align: center; margin-top: 20px;">
+            Select an object to see its properties
+          </div>
+        </div>
+      </aside>
     </div>
   </body>
 </html>
