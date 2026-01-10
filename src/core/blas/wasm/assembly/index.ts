@@ -27,3 +27,16 @@ export function drawTexToTex(
     }
   }
 }
+
+export function arrayFloat32ModifySegment(destPtr: usize, destIndex: i32, srcPtr: usize, srcLength: i32): void {
+  for (let i: i32 = 0; i < srcLength; i++) {
+    store<f32>(destPtr + (<usize>(destIndex + i) << 2), load<f32>(srcPtr + (<usize>i << 2)));
+  }
+}
+
+export function multiply(scalar: f32, ptr: usize, length: i32): void {
+  for (let i: i32 = 0; i < length; i++) {
+    let val = load<f32>(ptr + (<usize>i << 2));
+    store<f32>(ptr + (<usize>i << 2), val * scalar);
+  }
+}

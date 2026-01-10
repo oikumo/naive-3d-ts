@@ -1,10 +1,8 @@
-import { LocalBlasModule } from "./local-blas";
 import { Blas } from "./blas";
 
 export class BlasArrayF32 {
     length: number = 0;
     ptr: number = 0;
-    data: Float32Array;
     blas: Blas;
 
     constructor(blas: Blas, length: number) {
@@ -12,20 +10,15 @@ export class BlasArrayF32 {
         this.length = length;
         this.ptr = this.blas.module._malloc(length * Float32Array.BYTES_PER_ELEMENT);
 
-        this.data = new Float32Array(
-            blas.module.HEAPU8.buffer,
-            this.ptr,
-            length);
-
-        const initialView = this.view;
+        const initialView = this.data;
         for (let i = 0; i < this.length; i++) {
             initialView[i] = 0;
         }
     }
 
-    get view() {
+    get data() {
         return new Float32Array(
-            this.blas.module.HEAPU8.buffer, // Always fresh reference
+            this.blas.module.HEAPU8.buffer,
             this.ptr,
             this.length);
     }
@@ -34,15 +27,18 @@ export class BlasArrayF32 {
 export class BlasArrayUint32 {
     length: number = 0;
     ptr: number = 0;
-    data: Uint32Array;
+    blas: Blas;
 
-    constructor(blas: LocalBlasModule, length: number) {
+    constructor(blas: Blas, length: number) {
+        this.blas = blas;
         this.length = length;
-        this.ptr = blas._malloc(length * Uint32Array.BYTES_PER_ELEMENT);
+        this.ptr = this.blas.module._malloc(length * Uint32Array.BYTES_PER_ELEMENT);
+    }
 
-        this.data = new Uint32Array(
-            blas.HEAPU32.buffer,
+    get data() {
+        return new Uint32Array(
+            this.blas.module.HEAPU8.buffer,
             this.ptr,
-            length);
+            this.length);
     }
 }

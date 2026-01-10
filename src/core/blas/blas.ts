@@ -17,7 +17,7 @@ export class Blas {
     }
 
     createSharedArray(id: string, length: number) {
-        const sharedArray = new BlasArrayUint32(this.module, length);
+        const sharedArray = new BlasArrayUint32(this, length);
         this.sharedArrays.set(id, sharedArray);
 
         return sharedArray;

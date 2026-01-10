@@ -2,10 +2,11 @@
 
 export class LocalBlasModule {
     memory: WebAssembly.Memory;
-    buffer: ArrayBuffer;
-    HEAPU8: Uint8Array;
-    HEAPU32: Uint32Array;
-    HEAPF32: Float32Array;
+    get buffer() { return this.memory.buffer; }
+    get HEAPU8() { return new Uint8Array(this.buffer); }
+    get HEAPU32() { return new Uint32Array(this.buffer); }
+    get HEAPF32() { return new Float32Array(this.buffer); }
+
     #nextPtr: number = 8; // Start at 8 to avoid null-like pointer 0
     #exports: any;
 
@@ -14,10 +15,6 @@ export class LocalBlasModule {
     constructor(wasmExports: any) {
         this.#exports = wasmExports;
         this.memory = wasmExports.memory as WebAssembly.Memory;
-        this.buffer = this.memory.buffer;
-        this.HEAPU8 = new Uint8Array(this.buffer);
-        this.HEAPU32 = new Uint32Array(this.buffer);
-        this.HEAPF32 = new Float32Array(this.buffer);
 
         // Copy exports to this instance for direct access, except special ones
         for (const key in wasmExports) {
