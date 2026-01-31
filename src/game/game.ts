@@ -1,28 +1,39 @@
 import { ApplicationContext } from "../base/application/application-context";
 import { GameBase } from "../base/game/game-base";
-import { SceneBase } from "../base/scene/scene-base";
-import { MainScene } from "./scenes/main-scene/main-scene";
+import { SimpleScene } from "./scenes/simple-scene/simple-scene";
 
-export class Game implements GameBase {
-    #currentScene: SceneBase;
+export class Game extends GameBase {
     
     constructor() {
-        this.#currentScene = new MainScene();
+        super();
+        this.scene = new SimpleScene();
     }
 
-    setup(context: ApplicationContext) {
-        this.#currentScene.setup(context);
+    override setup(context: ApplicationContext) {
+        if (!this.scene) {
+            throw new Error("Game scene is not initialized");
+        }
+        this.scene.setup(context);
     }
 
-    start(context: ApplicationContext) {
-        this.#currentScene.start(context);
+    override start(context: ApplicationContext) {
+        if (!this.scene) {
+            throw new Error("Game scene is not initialized");
+        }
+        this.scene.start(context);
     }
 
-    update(context: ApplicationContext, deltaTime: number) {
-        this.#currentScene.update(context, deltaTime);
+    override update(context: ApplicationContext, deltaTime: number) {
+        if (!this.scene) {
+            throw new Error("Game scene is not initialized");
+        }
+        this.scene.update(context, deltaTime);
     }
 
-    render(context: ApplicationContext) {
-        this.#currentScene.render(context);
+    override render(context: ApplicationContext) {
+        if (!this.scene) {
+            throw new Error("Game scene is not initialized");
+        }
+        this.scene.render(context);
     }
 }

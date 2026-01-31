@@ -1,20 +1,20 @@
-import { TestLogger } from "naive-3d-integration-ts";
+import { TestLogger } from "../../../src/integration-tests-framework";
 import { EntityManager } from "../../../src/base/scene/entity-manager";
 import { BlasArrayF32 } from "../../../src/core/blas/blas-array";
 import { IntegrationTestContext } from "../../common/blas-context";
 
 export async function entitiesIntegrationTest(logger: TestLogger) {
     const context = await IntegrationTestContext.create();
-    
+
     const capacity = 1000;
     const entityManager = new EntityManager(context.blas, new BlasArrayF32(context.blas, capacity));
 
-    
+
     logger.log(`totalCapacity: ${entityManager.totalCapacity}`);
     logger.log(`available: ${entityManager.avaliable}`);
 
     const a = 1.1;
-    
+
     const entitiesId = new Array<number>();
 
     for (let i = 0; i < 3; i++) {
@@ -24,7 +24,7 @@ export async function entitiesIntegrationTest(logger: TestLogger) {
     entitiesId.forEach((id) => {
         logger.log(`entity id ${id} : ${entityManager.getEntity(id)}`);
     });
-    
+
     logger.log(`totalCapacity: ${entityManager.totalCapacity}`);
     logger.log(`available: ${entityManager.avaliable}`);
 
@@ -49,7 +49,7 @@ export async function entitiesIntegrationTest(logger: TestLogger) {
 
     arrayDataLog.length = 0;
     logger.log('array modified');
-        
+
 
     for (let i = 0; i < array.length; i++) {
         arrayDataLog.push(array.data[i].toString());
@@ -58,6 +58,6 @@ export async function entitiesIntegrationTest(logger: TestLogger) {
     logger.log(arrayDataLog.join(', '));
     logger.log('');
 
-    
+
     return;
 }

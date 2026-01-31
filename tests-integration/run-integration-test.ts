@@ -1,4 +1,4 @@
-import { Information, IntegrationTestRunner, MainController } from 'naive-3d-integration-ts';
+import { Information, IntegrationTestRunner, MainController } from '../src/integration-tests-framework';
 import { entitiesIntegrationTest } from './tests/entities/entities-integration-test';
 import { blasClassesTest } from './tests/blas/blas-classes-test';
 import { blasWasmModuleTest } from './tests/blas/blas-wasm-module-test';
@@ -8,7 +8,7 @@ const runner = new IntegrationTestRunner([
     entitiesIntegrationTest,
     blasClassesTest,
     blasWasmModuleTest,
-    blasSharedArrayTest 
+    blasSharedArrayTest
 ]);
 
 

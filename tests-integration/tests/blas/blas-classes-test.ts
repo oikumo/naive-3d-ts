@@ -1,10 +1,8 @@
-import { TestLogger } from "naive-3d-integration-ts";
+import { TestLogger } from "../../../src/integration-tests-framework";
 import { loadBlasModule } from "../../../src/core/blas/blas-loader";
 
 export async function blasClassesTest(logger: TestLogger) {
     const blas = await loadBlasModule();
-
-    throw Error();
 
     const data = new blas.module.Data();
     data.createArray(100000);
@@ -14,5 +12,5 @@ export async function blasClassesTest(logger: TestLogger) {
     }
 
     data.delete;
-    logger.log('class Data instance post delete. ');    
+    logger.log('class Data instance post delete. ');
 }

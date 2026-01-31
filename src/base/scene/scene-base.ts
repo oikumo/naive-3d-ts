@@ -1,12 +1,26 @@
 import { ApplicationContext } from '../../base/application/application-context';
+import { SceneHierarchy } from './scene-hierarchy';
 
-export interface SceneBase {
+export abstract class SceneBase {
 
-    setup(context: ApplicationContext) : void;
+    protected name: string;
 
-    start(context: ApplicationContext) : void;
+    constructor(name: string) {
+        this.name = name;
+    }
 
-    update(context: ApplicationContext, deltaTime: number) : void;
+    #hierarchy = new SceneHierarchy();
 
-    render(context: ApplicationContext) : void;
+    getName() { return this.name; }
+
+    get hierarchy() { return this.#hierarchy; }
+
+    abstract setup(context: ApplicationContext) : void;
+
+    abstract start(context: ApplicationContext) : void;
+
+    abstract update(context: ApplicationContext, deltaTime: number) : void;
+
+    abstract render(context: ApplicationContext) : void;
 }
+

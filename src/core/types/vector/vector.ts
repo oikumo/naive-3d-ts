@@ -21,12 +21,12 @@ export class Vector {
         this.#length = this.#data ? this.#data.length : 0;
     }
 
-    log() {
+    toString(): string {
         let message = new Array<number>();
         for (let i = 0; i < this.#data.length; i++) {
             message.push(this.#data[i]);
         }
 
-        console.log(message.join(','), '\n');
+        return message.join(',');
     }
 }

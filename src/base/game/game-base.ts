@@ -1,12 +1,17 @@
 import { ApplicationContext } from "../application/application-context";
+import { SceneBase } from "../scene/scene-base";
 
-export interface GameBase {
+export abstract class GameBase {
 
-    setup(context: ApplicationContext) : void;
+    protected scene: SceneBase | null = null;
+    
+    getScene() { return this.scene; }
 
-    start(context: ApplicationContext) : void;
+    abstract setup(context: ApplicationContext) : void;
 
-    update(context: ApplicationContext, deltaTime: number) : void;
+    abstract start(context: ApplicationContext) : void;
 
-    render(context: ApplicationContext) : void;
+    abstract update(context: ApplicationContext, deltaTime: number) : void;
+
+    abstract render(context: ApplicationContext) : void;
 }

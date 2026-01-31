@@ -1,9 +1,9 @@
-import { TestLogger } from "naive-3d-integration-ts";
+import { TestLogger } from "../../../src/integration-tests-framework";
 import { loadBlasModule } from "../../../src/core/blas/blas-loader";
 
 export async function blasWasmModuleTest(logger: TestLogger) {
     const blas = await loadBlasModule();
-    
+
     logger.log(`1. blas draw function call: ${blas.module.draw(2222)}`);
     logger.log(`2. blas int_sqrt function call: ${blas.module.int_sqrt(9)}`);
 

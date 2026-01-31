@@ -3,35 +3,37 @@ import { ScreenHtml } from '../screen/screen-html';
 import { ApplicationContext } from './application-context';
 
 export class Application {
-  private screen: ScreenHtml;
+  #screen: ScreenHtml;
   #game: GameBase;
   #context: ApplicationContext;
-  #time: number = 0;
   #deltaTime: number = 0;
+
+  get game() { return this.#game; }
 
   constructor(game: GameBase, context: ApplicationContext) {
     this.#context = context;
-    this.screen = context.screen;
+    this.#screen = context.screen;
     this.#game = game;
   }
 
   run() {
     this.#game.setup(this.#context);
     this.#game.start(this.#context);
-    let now = Date.now() / 1000;
-    this.#time = now; 
+    let lastTime = performance.now() / 1000;
     this.#deltaTime = 0;
 
-    setInterval(() => {
-      //this.screen.clear();
+    const loop = (nowTime: number) => {
+      const now = nowTime / 1000;
+      this.#deltaTime = now - lastTime;
+      lastTime = now;
+
       this.#game.update(this.#context, this.#deltaTime);
       this.#game.render(this.#context);
-      this.screen.update();
-      
-      now = Date.now() / 1000;
-      this.#deltaTime = now - this.#time;
-      this.#time = now;
+      this.#screen.update();
 
-    }, 1);
+      requestAnimationFrame(loop);
+    };
+
+    requestAnimationFrame(loop);
   }
 }
