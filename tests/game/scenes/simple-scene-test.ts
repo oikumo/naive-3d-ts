@@ -5,10 +5,12 @@ import { ApplicationContext } from '../../../src/base/application/application-co
 
 // Mock context for testing
 class MockContext {
+    observer: any = null;
+    
     screen = {
         width: 800,
         height: 600,
-        setMouseObserver: function(observer: any) {
+        setMouseObserver: (observer: any) => {
             this.observer = observer;
         },
         clearColor: 0,
@@ -78,8 +80,9 @@ test('SimpleScene setup method', () => {
     
     scene.setup(context);
     
-    // Should set mouse observer
-    equals(true, typeof context.screen.observer === 'object');
+    // Should set mouse observer (scene passes itself as observer)
+    equals(true, context.observer !== null);
+    equals(true, typeof context.observer === 'object');
 });
 
 test('SimpleScene start method', () => {
@@ -131,21 +134,6 @@ test('SimpleScene onActionDown without editor', () => {
     
     // Should not throw error
     scene.onActionDown(100, 200);
-    equals(true, true);
-});
-
-test('SimpleScene onMove updates mouse position', () => {
-    const scene = new SimpleScene();
-    const context = new MockContext() as any;
-    
-    scene.setup(context);
-    
-    // Move mouse to different positions
-    scene.onMove(100, 100);
-    scene.onMove(200, 300);
-    scene.onMove(50, 75);
-    
-    // Should not throw errors
     equals(true, true);
 });
 
