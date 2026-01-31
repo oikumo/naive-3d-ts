@@ -9,7 +9,7 @@ import { resolve } from 'path';
 
 export default defineConfig(({ mode }) => {
 
-  let indexPage = 'index-editor.html';
+  let indexPage = 'index.html';
   if (mode === 'test-integration') {
     indexPage = 'index-integration.html';
   }
