@@ -1,7 +1,39 @@
 
 
+interface WasmExports {
+    memory: WebAssembly.Memory;
+    __heap_base?: { value: number };
+    modify_array?(ptr: number, index: number, value: number): void;
+    drawTexToTex?(
+        destPtr: number,
+        destWidth: number,
+        srcPtr: number,
+        srcWidth: number,
+        srcHeight: number,
+        destX: number,
+        destY: number
+    ): void;
+    drawTexToTexScaled?(
+        destPtr: number,
+        destWidth: number,
+        srcPtr: number,
+        srcWidth: number,
+        srcHeight: number,
+        destX: number,
+        destY: number,
+        destScaleX: number,
+        destScaleY: number
+    ): void;
+    [key: string]: unknown;
+}
+
 export class LocalBlasModule {
     memory: WebAssembly.Memory;
+    Data: new () => {
+        createArray(length: number): void;
+        set(index: number, value: number): void;
+        get(index: number): number;
+    };
 
     #lastBufferReference: ArrayBuffer | null = null;
     #cachedHEAPU8: Uint8Array | null = null;
@@ -38,9 +70,9 @@ export class LocalBlasModule {
     }
 
     #nextPtr: number = 8; // Start at 8 to avoid null-like pointer 0
-    #exports: any;
+    #exports: WasmExports;
 
-    [key: string]: any;
+    [key: string]: unknown;
 
     constructor(wasmExports: any) {
         this.#exports = wasmExports;
@@ -57,16 +89,16 @@ export class LocalBlasModule {
         }
 
         // Add mock Data class for integration tests
-        this.Data = class Data {
-            #array: Uint32Array | null = null;
+        this.Data = class {
+            private array: Uint32Array | null = null;
             createArray(length: number) {
-                this.#array = new Uint32Array(length);
+                this.array = new Uint32Array(length);
             }
             set(index: number, value: number) {
-                if (this.#array) this.#array[index] = value;
+                if (this.array) this.array[index] = value;
             }
             get(index: number) {
-                return this.#array ? this.#array[index] : 0;
+                return this.array ? this.array[index] : 0;
             }
         };
 
@@ -89,14 +121,15 @@ export class LocalBlasModule {
         return ptr;
     }
 
-    ccall(name: string, _returnType: string | null, _argTypes: string[], args: any[]): any {
-        if (this.#exports[name]) {
-            return this.#exports[name](...args);
+    ccall(name: string, _returnType: string | null, _argTypes: string[], args: unknown[]): unknown {
+        const func = this.#exports[name];
+        if (typeof func === 'function') {
+            return (func as (...args: unknown[]) => unknown)(...args);
         }
         throw new Error(`ccall: function ${name} not implemented in WASM`);
     }
 
-    setValue(ptr: number, value: any, type: string): void {
+    setValue(ptr: number, value: number, type: string): void {
         const buffer = this.buffer;
         switch (type) {
             case 'i8': new Int8Array(buffer, ptr, 1)[0] = value; break;
@@ -138,7 +171,12 @@ export class LocalBlasModule {
     }
 
     modify_array(ptr: number, index: number, value: number): void {
-        this.#exports.modify_array(ptr, index, value);
+        const func = this.#exports.modify_array;
+        if (typeof func === 'function') {
+            func(ptr, index, value);
+        } else {
+            throw new Error(`modify_array function not available in WASM module`);
+        }
     }
 
     drawTexToTex(
@@ -150,7 +188,12 @@ export class LocalBlasModule {
         destX: number,
         destY: number
     ): void {
-        this.#exports.drawTexToTex(destPtr, destWidth, srcPtr, srcWidth, srcHeight, destX, destY);
+        const func = this.#exports.drawTexToTex;
+        if (typeof func === 'function') {
+            func(destPtr, destWidth, srcPtr, srcWidth, srcHeight, destX, destY);
+        } else {
+            throw new Error(`drawTexToTex function not available in WASM module`);
+        }
     }
 
     drawTexToTexScaled(
@@ -164,7 +207,12 @@ export class LocalBlasModule {
         destScaleX: number,
         destScaleY: number
     ): void {
-        this.#exports.drawTexToTexScaled(destPtr, destWidth, srcPtr, srcWidth, srcHeight, destX, destY, destScaleX, destScaleY);
+        const func = this.#exports.drawTexToTexScaled;
+        if (typeof func === 'function') {
+            func(destPtr, destWidth, srcPtr, srcWidth, srcHeight, destX, destY, destScaleX, destScaleY);
+        } else {
+            throw new Error(`drawTexToTexScaled function not available in WASM module`);
+        }
     }
 }
 

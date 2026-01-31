@@ -3,12 +3,9 @@ import { SceneHierarchy } from './scene-hierarchy';
 
 export abstract class SceneBase {
 
-    static instance: SceneBase;
-
     protected name: string;
 
     constructor(name: string) {
-        SceneBase.instance = this;
         this.name = name;
     }
 

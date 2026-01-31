@@ -9,7 +9,6 @@ export type EditorTool = 'move' | 'rotate' | 'scale';
 
 export class Editor {
 
-    static instance: Editor;
     #editorUi: EditorUI;
     private application: Application;
     #selectedGameObject: GameObject | null = null;
@@ -20,7 +19,6 @@ export class Editor {
     constructor(application: Application) {
         this.application = application;
         this.#editorUi = new EditorUI(this);
-        Editor.instance = this;
     }
 
     show() {
@@ -68,7 +66,11 @@ export class Editor {
 
         go.transform.position.x = Math.floor(50 + (Math.random() * (200)));
         go.transform.position.y = Math.floor(50 + (Math.random() * (200)));
-        this.application.game.getScene()!.hierarchy.addGameObject(go);
+        const scene = this.application.game.getScene();
+        if (!scene) {
+            throw new Error("No active scene found");
+        }
+        scene.hierarchy.addGameObject(go);
 
         this.#editorUi.updatePanelHierarchy();
         this.selectGameObject(go.id);
@@ -111,27 +113,50 @@ export class Editor {
         if (!this.#selectedGameObject) return;
 
         const original = this.#selectedGameObject;
-        // Simple duplication for now, could be more robust
-        const clone = new Player(`${original.name} (Copy)`);
+        let clone: GameObject;
+
+        // Create proper clone based on original type
+        if (original instanceof Player) {
+            clone = new Player(`${original.name} (Copy)`);
+        } else if (original instanceof SpriteObject) {
+            clone = new SpriteObject(`${original.name} (Copy)`);
+        } else if (original instanceof EmptyObject) {
+            clone = new EmptyObject(`${original.name} (Copy)`);
+        } else {
+            clone = new Player(`${original.name} (Copy)`);
+        }
+
         clone.transform.position.x = original.transform.position.x + 20;
         clone.transform.position.y = original.transform.position.y + 20;
         clone.transform.rotation = original.transform.rotation;
         clone.transform.scale.x = original.transform.scale.x;
         clone.transform.scale.y = original.transform.scale.y;
 
-        this.application.game.getScene()!.hierarchy.addGameObject(clone);
+        const scene = this.application.game.getScene();
+        if (!scene) {
+            throw new Error("No active scene found");
+        }
+        scene.hierarchy.addGameObject(clone);
         this.#editorUi.updatePanelHierarchy();
         this.selectGameObject(clone.id);
     }
 
     getHierarchy() {
-        return this.application.game.getScene()!.hierarchy.gameObjects;
+        const scene = this.application.game.getScene();
+        if (!scene) {
+            throw new Error("No active scene found");
+        }
+        return scene.hierarchy.gameObjects;
     }
 
     deleteSelectedGameObject() {
         if (!this.#selectedGameObject) return;
 
-        this.application.game.getScene()!.hierarchy.removeGameObject(this.#selectedGameObject.id);
+        const scene = this.application.game.getScene();
+        if (!scene) {
+            throw new Error("No active scene found");
+        }
+        scene.hierarchy.removeGameObject(this.#selectedGameObject.id);
         this.#selectedGameObject = null;
         this.#editorUi.updatePanelHierarchy();
         this.#editorUi.updateInspector();

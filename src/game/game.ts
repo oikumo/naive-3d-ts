@@ -10,18 +10,30 @@ export class Game extends GameBase {
     }
 
     override setup(context: ApplicationContext) {
-        this.scene!.setup(context);
+        if (!this.scene) {
+            throw new Error("Game scene is not initialized");
+        }
+        this.scene.setup(context);
     }
 
     override start(context: ApplicationContext) {
-        this.scene!.start(context);
+        if (!this.scene) {
+            throw new Error("Game scene is not initialized");
+        }
+        this.scene.start(context);
     }
 
     override update(context: ApplicationContext, deltaTime: number) {
-        this.scene!.update(context, deltaTime);
+        if (!this.scene) {
+            throw new Error("Game scene is not initialized");
+        }
+        this.scene.update(context, deltaTime);
     }
 
     override render(context: ApplicationContext) {
-        this.scene!.render(context);
+        if (!this.scene) {
+            throw new Error("Game scene is not initialized");
+        }
+        this.scene.render(context);
     }
 }

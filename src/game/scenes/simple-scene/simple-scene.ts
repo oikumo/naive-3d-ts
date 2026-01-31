@@ -15,6 +15,7 @@ export class SimpleScene extends SceneBase implements UserInputBase {
     #cursorTexture: BlasArrayUint32 | null = null;
     #screenTexture: BlasArrayUint32 | null = null;
     #blocksTexture: BlasArrayUint32 | null = null;
+    #editor: Editor | null = null;
 
     constructor() {
         super('Simple Scene');
@@ -24,6 +25,9 @@ export class SimpleScene extends SceneBase implements UserInputBase {
         context.screen.setMouseObserver(this);
         this.#mouseLastPosition.x = context.screen.width / 2;
         this.#mouseLastPosition.y = context.screen.height / 2;
+        
+        // Store editor reference for mouse interactions
+        this.#editor = (context as any).editor;
     }
 
     override start(context: ApplicationContext) {
@@ -87,16 +91,22 @@ export class SimpleScene extends SceneBase implements UserInputBase {
     }
 
     onActionUp(_x: number, _y: number): void {
-        Editor.instance.handleMouseUp();
+        if (this.#editor) {
+            this.#editor.handleMouseUp();
+        }
     }
 
     onMove(x: number, y: number): void {
         this.#mouseLastPosition.x = x;
         this.#mouseLastPosition.y = y;
-        Editor.instance.handleMouseMove(x, y);
+        if (this.#editor) {
+            this.#editor.handleMouseMove(x, y);
+        }
     }
 
     onActionDown(x: number, y: number): void {
-        Editor.instance.handleMouseDown(x, y);
+        if (this.#editor) {
+            this.#editor.handleMouseDown(x, y);
+        }
     }
 }
