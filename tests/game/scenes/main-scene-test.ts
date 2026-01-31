@@ -4,10 +4,12 @@ import { ApplicationContext } from '../../../src/base/application/application-co
 
 // Mock context for testing
 class MockContext {
+    observer: any = null;
+    
     screen = {
         width: 800,
         height: 600,
-        setMouseObserver: function(observer: any) {
+        setMouseObserver: (observer: any) => {
             this.observer = observer;
         },
         clearColor: 0,
@@ -37,7 +39,7 @@ class MockContext {
 
 test('MainScene creates instance', () => {
     // Since MainScene extends SceneBase which requires a name,
-    // but MainScene doesn't override constructor, we'll test that it can be created
+    // but MainScene does not override constructor, we'll test that it can be created
     try {
         const scene = new (MainScene as any)('Main Scene');
         equals(true, scene instanceof MainScene);
