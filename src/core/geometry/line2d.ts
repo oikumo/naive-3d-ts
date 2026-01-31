@@ -13,11 +13,10 @@ export class Line2d {
     isPerpendicularToXAxis() {
         return this.a.x - this.b.x === 0;
     }
-
     slope() {
-        if (this.isPerpendicularToXAxis()) return null;
-        const delta = Point2d.delta(this.b, this.a);
-        return delta.y / delta.x;
+        const dx = this.b.x - this.a.x;
+        if (dx === 0) return null;
+        return (this.b.y - this.a.y) / dx;
     }
 
     getXfromY(y: number) {
@@ -33,12 +32,12 @@ export class Line2d {
     static draw(tex: ScreenTexture, width: number, height: number, p: Point2d, q: Point2d, color: number) {
         const delta = Point2d.delta(q, p);
         const n = Math.max(Math.abs(delta.x), Math.abs(delta.y));
-        
+
         //const px = Math.floor(p.x);
         //const py = Math.floor(p.y);
-        
+
         let i, t, x, y;
-        
+
         for (i = n - 1; i > 0; --i) {
             t = i / n;
 
