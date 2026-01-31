@@ -54,26 +54,34 @@ export class Editor {
     }
 
     addGameObject(type: string = 'player') {
-        let go: GameObject;
-        const name = `${type.charAt(0).toUpperCase() + type.slice(1)} ${this.getHierarchy().length + 1}`;
+        try {
+            let go: GameObject;
+            const hierarchy = this.getHierarchy();
+            const name = `${type.charAt(0).toUpperCase() + type.slice(1)} ${hierarchy.length + 1}`;
 
-        switch (type) {
-            case 'empty': go = new EmptyObject(name); break;
-            case 'sprite': go = new SpriteObject(name); break;
-            case 'player':
-            default: go = new Player(name); break;
+            switch (type) {
+                case 'empty': go = new EmptyObject(name); break;
+                case 'sprite': go = new SpriteObject(name); break;
+                case 'player':
+                default: go = new Player(name); break;
+            }
+
+            go.transform.position.x = Math.floor(50 + (Math.random() * (200)));
+            go.transform.position.y = Math.floor(50 + (Math.random() * (200)));
+            
+            const scene = this.application.game.getScene();
+            if (!scene) {
+                throw new Error("No active scene found");
+            }
+            
+            scene.hierarchy.addGameObject(go);
+
+            this.#editorUi.updatePanelHierarchy();
+            this.selectGameObject(go.id);
+        } catch (error) {
+            console.error("Error adding game object:", error);
+            throw error;
         }
-
-        go.transform.position.x = Math.floor(50 + (Math.random() * (200)));
-        go.transform.position.y = Math.floor(50 + (Math.random() * (200)));
-        const scene = this.application.game.getScene();
-        if (!scene) {
-            throw new Error("No active scene found");
-        }
-        scene.hierarchy.addGameObject(go);
-
-        this.#editorUi.updatePanelHierarchy();
-        this.selectGameObject(go.id);
     }
 
     handleMouseDown(x: number, y: number) {

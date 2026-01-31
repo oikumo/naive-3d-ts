@@ -25,9 +25,10 @@ export class SimpleScene extends SceneBase implements UserInputBase {
         context.screen.setMouseObserver(this);
         this.#mouseLastPosition.x = context.screen.width / 2;
         this.#mouseLastPosition.y = context.screen.height / 2;
-        
-        // Store editor reference for mouse interactions
-        this.#editor = (context as any).editor;
+    }
+
+    setEditor(editor: Editor) {
+        this.#editor = editor;
     }
 
     override start(context: ApplicationContext) {

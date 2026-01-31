@@ -21,6 +21,13 @@ class Main {
         const main = new Main(new Game());
         const application = await main.init();
         const editor = new Editor(application);
+        
+        // Pass editor to the scene for mouse interactions
+        const scene = application.game.getScene();
+        if (scene && 'setEditor' in scene) {
+            (scene as any).setEditor(editor);
+        }
+        
         editor.show();
     } catch (e: any) {
         console.error(e);
