@@ -1,19 +1,9 @@
-import * as blasWasm from 'naive-blas-wasm';
+import loadLocalBlas from './local-blas';
 import { Blas } from './blas';
 
 export async function loadBlasModule() {
-    let blas: blasWasm.MainModule | null = null;
-    try {  
-      blas = await blasWasm.default();
-    } catch (err) {
-      throw Error('Load BLAS module error');
-    }
-  
-    if (blas === null){
-      throw Error('Load BLAS module error');
-    } 
-  
-    return new Blas(blas);
+  const blas = await loadLocalBlas();
+  return new Blas(blas);
 }
 
 

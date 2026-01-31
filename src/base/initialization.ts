@@ -12,7 +12,7 @@ export async function initialization(game: GameBase) {
     const blas = await loadBlasModule();
     const canvas = document.getElementById("canvas");
     if (!(canvas instanceof HTMLCanvasElement)) {
-      throw Error("Invalid Argument");
+      throw new Error("Canvas element with id 'canvas' not found or is not an HTMLCanvasElement");
     }
 
     const canvasRenderer = new ScreenCanvas(canvas);

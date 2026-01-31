@@ -1,15 +1,19 @@
 import { ApplicationContext } from '../../base/application/application-context';
-import { GameObject } from './game-object';
+import { SceneHierarchy } from './scene-hierarchy';
 
 export abstract class SceneBase {
 
-    static instance: SceneBase;
+    protected name: string;
 
-    gameObjects = new Array<GameObject>();
-
-    constructor() {
-        SceneBase.instance = this;
+    constructor(name: string) {
+        this.name = name;
     }
+
+    #hierarchy = new SceneHierarchy();
+
+    getName() { return this.name; }
+
+    get hierarchy() { return this.#hierarchy; }
 
     abstract setup(context: ApplicationContext) : void;
 
@@ -18,17 +22,5 @@ export abstract class SceneBase {
     abstract update(context: ApplicationContext, deltaTime: number) : void;
 
     abstract render(context: ApplicationContext) : void;
-
-
 }
 
-export class SceneObject {
-
-    gameObjects = new Array<GameObject>();
-
-    serialize() {
-        for (let i = 0; i < this.gameObjects.length; i++) {
-            this.gameObjects[i].constructor.name;
-        }
-    }
-}
