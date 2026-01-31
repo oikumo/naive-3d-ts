@@ -7,16 +7,30 @@ export class EditorUI {
     constructor(editor: Editor) {
         this.#editor = editor;
 
-        this.initCreateMenu();
-        this.initToolbar();
+        // Wait for DOM to be ready before initializing UI
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => {
+                this.initCreateMenu();
+                this.initToolbar();
+            });
+        } else {
+            this.initCreateMenu();
+            this.initToolbar();
+        }
     }
 
     initCreateMenu() {
+        console.log('Initializing create menu...');
         const createBtn = document.getElementById('editor-btn-create');
         const createMenu = document.getElementById('create-menu');
 
+        console.log('createBtn:', createBtn);
+        console.log('createMenu:', createMenu);
+
         if (!createBtn || !createMenu) {
-            console.warn('Editor UI: Create menu elements not found. Check index.html');
+            console.error('Editor UI: Create menu elements not found. Check index.html');
+            console.error('Available elements with IDs:', 
+                Array.from(document.querySelectorAll('[id]')).map(el => el.id));
             return;
         }
 
